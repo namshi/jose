@@ -11,6 +11,12 @@
             "email": "alessandro.nadalin@gmail.com"
         }
     ],
+    "autoload": {
+        "psr-0": {
+            "Namshi\\JOSE":  "src/",
+            "Namshi\\JOSE\\Test":  "tests/"
+        }
+    },
     "require": {
 
     }
