@@ -1,0 +1,17 @@
+{
+    "name": "namshi/jose",
+    "description": "JSON Object Signing and Encryption library for PHP.",
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alessandro Nadalin",
+            "email": "alessandro.nadalin@gmail.com"
+        }
+    ],
+    "require": {
+
+    }
+}
