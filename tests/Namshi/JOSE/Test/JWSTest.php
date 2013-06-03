@@ -26,9 +26,12 @@ class JWSTest extends TestCase
         $privateKey = openssl_pkey_get_private($this->getSslKeyPath() . "private.key", self::SSL_KEY_PASSPHRASE);
         $this->jws->sign($privateKey);
         
-        $jws        = JWS::load($this->jws->getTokenString(), true);
+        $jws        = JWS::load($this->jws->getTokenString());
         $public_key = openssl_pkey_get_public($this->getSslKeyPath() . "public.key");
         $this->assertTrue($jws->verify($public_key));
+        
+        $payload = $jws->getPayload();
+        $this->assertEquals('b', $payload['a']);
     }
     
     public function testVerificationThatTheJWSIsSigned()
