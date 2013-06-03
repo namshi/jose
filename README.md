@@ -1,5 +1,7 @@
 # NAMSHI | JOSE
 
+[![Build Status](https://travis-ci.org/namshi/jose.png?branch=master)](https://travis-ci.org/namshi/jose)
+
 This library provides a lightweight
 implementation of the JWS
 ([JSON Web Signature](http://tools.ietf.org/html/draft-jones-json-web-signature-04)) specification.
