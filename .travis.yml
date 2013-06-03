@@ -8,7 +8,7 @@ matrix:
     - php: 5.5
 before_script:
     - COMPOSER_ROOT_VERSION=dev-master composer --prefer-source --dev install
-script: phpunit test
+script: phpunit tests
 notifications:
   email:
     - alessandro.nadalin@gmail.com

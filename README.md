@@ -2,7 +2,10 @@
 
 This library provides a lightweight
 implementation of the JWS
-(JSON Web Signature) specification.
+([JSON Web Signature](http://tools.ietf.org/html/draft-jones-json-web-signature-04)) specification.
+
+This library has been inspired by the
+[work done by @ritou](https://github.com/ritou/php-Akita_JOSE).
 
 ## Installation
 
