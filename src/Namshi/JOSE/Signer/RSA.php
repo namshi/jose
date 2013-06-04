@@ -15,15 +15,11 @@ abstract class RSA implements SignerInterface
      * @inheritdoc
      */
     public function sign($input, $key)
-    {        
-        $cipherText = null;
+    {
+        $signature = null;
+        openssl_sign($input, $signature, $key, $this->hashingAlgorithm);
         
-        if(openssl_private_encrypt($this->hash($input), $cipherText, $key))
-        {
-            return $cipherText;
-        }
-        
-        return null;
+        return $signature;
     }
     
     /**
@@ -31,13 +27,7 @@ abstract class RSA implements SignerInterface
      */
     public function verify($key, $signature, $input)
     {
-        $plainText  = NULL;
-        
-        if(openssl_public_decrypt($signature, $plainText, $key)) {
-            return $plainText === $this->hash($input);
-        }
-        
-        return false;
+        return (bool) openssl_verify($input, $signature, $key, $this->hashingAlgorithm);
     }
     
     /**
