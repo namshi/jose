@@ -16,18 +16,13 @@ class JWSTest extends TestCase
         $this->jws->setPayload($data);
     }
     
-    public function getSslKeyPath()
-    {
-        return "file://" . TEST_DIR . DIRECTORY_SEPARATOR;
-    }
-    
     public function testVerificationRS256()
     {
-        $privateKey = openssl_pkey_get_private($this->getSslKeyPath() . "private.key", self::SSL_KEY_PASSPHRASE);
+        $privateKey = openssl_pkey_get_private(SSL_KEYS_PATH . "private.key", self::SSL_KEY_PASSPHRASE);
         $this->jws->sign($privateKey);
         
         $jws        = JWS::load($this->jws->getTokenString());
-        $public_key = openssl_pkey_get_public($this->getSslKeyPath() . "public.key");
+        $public_key = openssl_pkey_get_public(SSL_KEYS_PATH . "public.key");
         $this->assertTrue($jws->verify($public_key));
         
         $payload = $jws->getPayload();
@@ -36,7 +31,7 @@ class JWSTest extends TestCase
     
     public function testVerificationThatTheJWSIsSigned()
     {
-        $privateKey = openssl_pkey_get_private($this->getSslKeyPath() . "private.key", self::SSL_KEY_PASSPHRASE);
+        $privateKey = openssl_pkey_get_private(SSL_KEYS_PATH . "private.key", self::SSL_KEY_PASSPHRASE);
         $this->jws->sign($privateKey);
         $this->assertTrue($this->jws->isSigned());
     }
@@ -51,11 +46,11 @@ class JWSTest extends TestCase
      */
     public function testWrongVerificationRS256()
     {
-        $privateKey = openssl_pkey_get_private($this->getSslKeyPath() . "private.key", self::SSL_KEY_PASSPHRASE);
+        $privateKey = openssl_pkey_get_private(SSL_KEYS_PATH . "private.key", self::SSL_KEY_PASSPHRASE);
         $this->jws->sign($privateKey);
         
         $jws        = JWS::load('eyJhbGciOiJ0ZXN0In0=.eyJhbGciOiJ0ZXN0In0=.eyJhbGciOiJ0ZXN0In0=', true);
-        $public_key = openssl_pkey_get_public($this->getSslKeyPath() . "public.key");
+        $public_key = openssl_pkey_get_public(SSL_KEYS_PATH . "public.key");
         $this->assertFalse($jws->verify($public_key));
     }
     
