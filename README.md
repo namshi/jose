@@ -43,7 +43,8 @@ if ($username == 'correctUsername' && $pass = 'ok') {
 	));
 
     $privateKey = openssl_pkey_get_private("file://path/to/private.key", self::SSL_KEY_PASSPHRASE);;
-    setcookie('identity', $jws->sign($privateKey));
+    $jws->sign($privateKey)
+    setcookie('identity', $jws->getTokenString());
 }
 ```
 
