@@ -34,7 +34,7 @@ First, generate the JSW:
 
 use Namshi\JOSE\JWS;
 
-if ($username == 'correctUsername' && $pass = 'ok') {
+if ($username == 'correctUsername' && $pass == 'ok') {
 	$user = Db::loadUserByUsername($username);
 
 	$jws  = new JWS('RS256');
