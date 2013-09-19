@@ -6,13 +6,14 @@ This library provides a lightweight
 implementation of the JWS
 ([JSON Web Signature](http://tools.ietf.org/html/draft-jones-json-web-signature-04)) specification.
 
-This library has been inspired by the
-[work done by @ritou](https://github.com/ritou/php-Akita_JOSE).
-
 ## Installation
 
 You can install the library directly from
-composer / packagist.
+composer / [packagist](https://packagist.org/packages/namshi/jose):
+
+```
+"namshi/jose": "1.0.*"
+```
 
 ## Usage
 
@@ -70,3 +71,24 @@ if ($jws->isValid($public_key)) {
 	echo sprintf("Hey, my JS app just did an action authenticated as user #%s", $payload['id']);
 }
 ```
+
+## Under the hood
+
+In order to [validate the JWS](https://github.com/namshi/jose/blob/master/src/Namshi/JOSE/JWS.php#L126),
+the signature is first [verified](https://github.com/namshi/jose/blob/master/src/Namshi/JOSE/JWS.php#L110)
+with a public key and then we will check whether the [token is expired](https://github.com/namshi/jose/blob/master/src/Namshi/JOSE/JWS.php#L172).
+
+To give a JWS a TTL, just use the standard `exp` value in the payload:
+
+``` php
+$date    	= new DateTime('tomorrow');
+$this->jws  = new JWS('RS256');
+$this->jws->setPayload(array(
+	'exp' => $date->format('U'),
+));
+```
+
+## Credits
+
+This library has been inspired by the
+[initial work done by @ritou](https://github.com/ritou/php-Akita_JOSE).
