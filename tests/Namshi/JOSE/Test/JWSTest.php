@@ -15,7 +15,7 @@ class JWSTest extends TestCase
         $date       = new DateTime('tomorrow');
         $data       = array(
             'a'     => 'b',
-            'exp'   => $date->format(DateTime::ISO8601)
+            'exp'   => $date->format('U')
         );
         $this->jws  = new JWS('RS256');
         $this->jws->setPayload($data);
@@ -48,7 +48,7 @@ class JWSTest extends TestCase
     {
         $date       = new DateTime('yesterday');
         $this->jws->setPayload(array(
-            'exp' => $date->format(DateTime::ISO8601)
+            'exp' => $date->format('U')
         ));
         $privateKey = openssl_pkey_get_private(SSL_KEYS_PATH . "private.key", self::SSL_KEY_PASSPHRASE);
         $this->jws->sign($privateKey);

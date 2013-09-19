@@ -173,11 +173,10 @@ class JWS extends JWT
     {
         $payload = $this->getPayload();
 
-        if (isset($payload['exp'])) {
-            $expirationDate = new \DateTime($payload['exp']);
+        if (isset($payload['exp']) && is_numeric($payload['exp'])) {
             $now            = new \DateTime('now');
 
-            return ($now->format('U') - $expirationDate->format('U')) > 0;
+            return ($now->format('U') - $payload['exp']) > 0;
         }
 
         return false;
