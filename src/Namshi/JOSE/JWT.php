@@ -53,6 +53,11 @@ class JWT
     public function setPayload(array $payload)
     {
         $this->payload = $payload;
+
+        if (!isset($this->payload['iat'])) {
+            $now                    = new \DateTime('now');
+            $this->payload['iat']   = $now->format('U');
+        }
     }
 
     /**
