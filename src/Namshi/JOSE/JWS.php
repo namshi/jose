@@ -86,7 +86,7 @@ class JWS extends JWT
         
         if (count($parts) === 3) {
             $header     = json_decode(base64_decode($parts[0]), true);
-            $payload    = json_decode(base64_decode($parts[1]), true);            
+            $payload    = json_decode(base64_decode($parts[1]), true);
             
             if (is_array($header) && is_array($payload)) {
                 $jws        = new self($header['alg'], isset($header['type']) ? $header['type'] : null);
@@ -113,6 +113,19 @@ class JWS extends JWT
         $signinInput        = $this->generateSigninInput();
 
         return $this->getSigner()->verify($key, $decodedSignature, $signinInput);
+    }
+
+    /**
+     * Checks that the JWS has been signed with a valid private key by verifying it with a public $key
+     * and the token is not expired.
+     *
+     * @param $key
+     *
+     * @return bool
+     */
+    public function isValid($key)
+    {
+        return $this->verify($key) && !$this->isExpired();
     }
     
     /**
@@ -149,5 +162,24 @@ class JWS extends JWT
         }
 
         throw new InvalidArgumentException(sprintf("The algorithm '%s' is not supported", $this->header['alg']));
+    }
+
+    /**
+     * Checks whether the token is expired.
+     *
+     * @return bool
+     */
+    protected function isExpired()
+    {
+        $payload = $this->getPayload();
+
+        if (isset($payload['exp'])) {
+            $expirationDate = new \DateTime($payload['exp']);
+            $now            = new \DateTime('now');
+
+            return ($now->format('U') - $expirationDate->format('U')) > 0;
+        }
+
+        return false;
     }
 }
