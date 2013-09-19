@@ -22,6 +22,7 @@ class JWS extends JWT
     public function __construct($algorithm, $type = null)
     {
         $this->header = array('alg' => $algorithm, 'typ' => $type ?: "JWS");
+        $this->setPayload(array());
     }
     
     /**
@@ -87,7 +88,7 @@ class JWS extends JWT
         if (count($parts) === 3) {
             $header     = json_decode(base64_decode($parts[0]), true);
             $payload    = json_decode(base64_decode($parts[1]), true);
-            
+
             if (is_array($header) && is_array($payload)) {
                 $jws        = new self($header['alg'], isset($header['type']) ? $header['type'] : null);
                 $jws->setPayload($payload);
