@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/namshi/jose.png?branch=master)](https://travis-ci.org/namshi/jose)
 
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/4beaf3d1-0bc6-4869-b99f-71dc951a2a05/mini.png)](https://insight.sensiolabs.com/projects/4beaf3d1-0bc6-4869-b99f-71dc951a2a05)
+
 This library provides a lightweight
 implementation of the JWS
 ([JSON Web Signature](http://tools.ietf.org/html/draft-jones-json-web-signature-04)) specification.
