@@ -68,7 +68,7 @@ $public_key = openssl_pkey_get_public("/path/to/public.key");
 // verify that the token is valid and had the same values
 // you emitted before while setting it as a cookie
 if ($jws->isValid($public_key)) {
-	$paylod = $jws->getPayload();
+	$payload = $jws->getPayload();
 
 	echo sprintf("Hey, my JS app just did an action authenticated as user #%s", $payload['id']);
 }
