@@ -79,9 +79,10 @@ class JWS extends JWT
      * Creates an instance of a JWS from a JWT.
      * 
      * @param string $jwsTokenString
+     * @param string $error If true or undefined, throws an error on invalid token.
      * @return Namshi\JOSE\JWS
      */
-    public static function load($jwsTokenString)
+    public static function load($jwsTokenString, $error = true)
     {
         $parts = explode('.', $jwsTokenString);
         
@@ -98,7 +99,11 @@ class JWS extends JWT
             }
         }
         
-        throw new InvalidArgumentException(sprintf('The token "%s" is an invalid JWS', $jwsTokenString));
+        if ($error) {
+            throw new InvalidArgumentException(sprintf('The token "%s" is an invalid JWS', $jwsTokenString));
+        } else {
+            return false;
+        }
     }
     
     /**
