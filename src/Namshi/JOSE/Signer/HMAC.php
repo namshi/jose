@@ -3,19 +3,16 @@
 namespace Namshi\JOSE\Signer;
 
 /**
- * Class responsible to sign inputs with the RSA algorithm, after hashing it.
+ * This class is the base of all HMAC Signers
  */
-abstract class RSA implements SignerInterface
+abstract class HMAC implements SignerInterface
 {
     /**
      * @inheritdoc
      */
     public function sign($input, $key)
     {
-        $signature = null;
-        openssl_sign($input, $signature, $key, $this->getHashingAlgorithm());
-
-        return $signature;
+        return hash_hmac($this->getHashingAlgorithm(), $input, $key);
     }
 
     /**
@@ -23,7 +20,7 @@ abstract class RSA implements SignerInterface
      */
     public function verify($key, $signature, $input)
     {
-        return (bool) openssl_verify($input, $signature, $key, $this->getHashingAlgorithm());
+        return $signature === $this->sign($input, $key);
     }
 
     /**

@@ -2,7 +2,8 @@
     "name": "namshi/jose",
     "description": "JSON Object Signing and Encryption library for PHP.",
     "require-dev": {
-        "phpunit/phpunit": "3.7.*"
+        "phpunit/phpunit": "4.*",
+        "satooshi/php-coveralls": "dev-master"
     },
     "license": "MIT",
     "authors": [
@@ -13,11 +14,11 @@
     ],
     "autoload": {
         "psr-0": {
-            "Namshi\\JOSE":  "src/",
-            "Namshi\\JOSE\\Test":  "tests/"
+            "Namshi\\JOSE":  "src/"
         }
     },
     "require": {
-
+        "php": ">=5.3.3",
+        "lib-openssl": "*"
     }
 }
