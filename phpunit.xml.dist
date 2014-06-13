@@ -1,21 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<phpunit backupGlobals="true"
-         bootstrap="tests/bootstrap.php"
-         backupStaticAttributes="false"
-         colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         forceCoversAnnotation="false"
-         mapTestClassNameToCoveredClassName="false"
-         processIsolation="false"
-         stopOnError="false"
-         stopOnFailure="false"
-         stopOnIncomplete="false"
-         stopOnSkipped="false"
-         syntaxCheck="false"
-         testSuiteLoaderClass="PHPUnit_Runner_StandardTestSuiteLoader"
-         strict="false"
-         verbose="false">
+<phpunit
+    backupGlobals="true"
+    strict="false"
+    backupStaticAttributes="false"
+    convertErrorsToExceptions="true"
+    convertNoticesToExceptions="true"
+    convertWarningsToExceptions="true"
+    forceCoversAnnotation="false"
+    mapTestClassNameToCoveredClassName="false"
+    processIsolation="false"
+    stopOnFailure="false"
+    stopOnError="false"
+    stopOnIncomplete="false"
+    stopOnSkipped="false"
+    syntaxCheck="false"
+    bootstrap="tests/bootstrap.php"
+    verbose="false"
+    colors="true">
+    <testsuites>
+        <testsuite name="namshi/jose Test Suite">
+            <directory suffix="Test.php">./tests</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+                <directory suffix=".php">./</directory>
+                <exclude>
+                    <directory>./tests</directory>
+                    <directory>./vendor</directory>
+                </exclude>
+        </whitelist>
+    </filter>
 </phpunit>

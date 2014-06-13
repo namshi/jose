@@ -9,10 +9,10 @@ class JWT
 {
     protected $payload;
     protected $header;
-    
+
     /**
      * Constructor
-     * 
+     *
      * @param array $payload
      * @param array $header
      */
@@ -21,23 +21,23 @@ class JWT
         $this->payload = $payload;
         $this->header  = $header;
     }
-    
+
     /**
      * Generates the signininput for the current JWT.
-     * 
+     *
      * @return string
      */
     public function generateSigninInput()
     {
         $base64payload  = base64_encode(json_encode($this->getPayload()));
         $base64header   = base64_encode(json_encode($this->getHeader()));
-        
+
         return sprintf("%s.%s", $base64header, $base64payload);
     }
-    
+
     /**
      * Returns the payload of the JWT.
-     * 
+     *
      * @return array
      */
     public function getPayload()
@@ -47,7 +47,7 @@ class JWT
 
     /**
      * Sets the payload of the current JWT.
-     * 
+     *
      * @param array $payload
      */
     public function setPayload(array $payload)
@@ -62,7 +62,7 @@ class JWT
 
     /**
      * Returns the header of the JWT.
-     * 
+     *
      * @return array
      */
     public function getHeader()
@@ -72,7 +72,7 @@ class JWT
 
     /**
      * Sets the header of this JWT.
-     * 
+     *
      * @param array $header
      */
     public function setHeader(array $header)
