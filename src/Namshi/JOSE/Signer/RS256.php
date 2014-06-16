@@ -9,6 +9,6 @@ class RS256 extends RSA
 {
     public function getHashingAlgorithm()
     {
-        return version_compare(phpversion(), '5.4', '<')?'SHA512':OPENSSL_ALGO_SHA256;
+        return version_compare(phpversion(), '5.4', '<') ? 'SHA512' : OPENSSL_ALGO_SHA256;
     }
 }

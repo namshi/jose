@@ -3,7 +3,7 @@
 namespace Namshi\JOSE\Test\Signer;
 
 use \PHPUnit_Framework_TestCase as TestCase;
-use Namshi\JOSE\Signer\none;
+use Namshi\JOSE\Signer\None;
 
 class noneTest extends TestCase
 {
