@@ -9,7 +9,7 @@ use DateTime;
 class JWSTest extends TestCase
 {
     const SSL_KEY_PASSPHRASE = 'tests';
-    
+
     public function setup()
     {
         $date       = new DateTime('tomorrow');
@@ -20,16 +20,16 @@ class JWSTest extends TestCase
         $this->jws  = new JWS('RS256');
         $this->jws->setPayload($data);
     }
-    
+
     public function testVerificationRS256()
     {
         $privateKey = openssl_pkey_get_private(SSL_KEYS_PATH . "private.key", self::SSL_KEY_PASSPHRASE);
         $this->jws->sign($privateKey);
-        
+
         $jws        = JWS::load($this->jws->getTokenString());
         $public_key = openssl_pkey_get_public(SSL_KEYS_PATH . "public.key");
         $this->assertTrue($jws->verify($public_key));
-        
+
         $payload = $jws->getPayload();
         $this->assertEquals('b', $payload['a']);
     }
@@ -57,19 +57,19 @@ class JWSTest extends TestCase
         $public_key = openssl_pkey_get_public(SSL_KEYS_PATH . "public.key");
         $this->assertFalse($jws->isValid($public_key));
     }
-    
+
     public function testVerificationThatTheJWSIsSigned()
     {
         $privateKey = openssl_pkey_get_private(SSL_KEYS_PATH . "private.key", self::SSL_KEY_PASSPHRASE);
         $this->jws->sign($privateKey);
         $this->assertTrue($this->jws->isSigned());
     }
-    
+
     public function testVerificationThatTheJWSIsNotSigned()
     {
         $this->assertFalse($this->jws->isSigned());
     }
-    
+
     /**
      * @expectedException InvalidArgumentException
      */
@@ -77,12 +77,12 @@ class JWSTest extends TestCase
     {
         $privateKey = openssl_pkey_get_private(SSL_KEYS_PATH . "private.key", self::SSL_KEY_PASSPHRASE);
         $this->jws->sign($privateKey);
-        
+
         $jws        = JWS::load('eyJhbGciOiJ0ZXN0In0=.eyJhbGciOiJ0ZXN0In0=.eyJhbGciOiJ0ZXN0In0=', true);
         $public_key = openssl_pkey_get_public(SSL_KEYS_PATH . "public.key");
         $this->assertFalse($jws->verify($public_key));
     }
-    
+
     /**
      * @expectedException InvalidArgumentException
      */
@@ -90,7 +90,7 @@ class JWSTest extends TestCase
     {
         JWS::load('test.Test.TEST', true);
     }
-    
+
     /**
      * @expectedException InvalidArgumentException
      */

@@ -12,10 +12,10 @@ class JWS extends JWT
     protected $signature;
     protected $isSigned = false;
     protected $encodedSignature;
-    
+
     /**
      * Constructor
-     * 
+     *
      * @param array $algorithm
      * @param array $type
      */
@@ -24,24 +24,24 @@ class JWS extends JWT
         $this->header = array('alg' => $algorithm, 'typ' => $type ?: "JWS");
         $this->setPayload(array());
     }
-    
+
     /**
      * Signs the JWS signininput.
-     * 
-     * @param resource $key
+     *
+     * @param  resource $key
      * @return string
      */
     public function sign($key)
-    {        
+    {
         $this->signature    = $this->getSigner()->sign($this->generateSigninInput(), $key);
         $this->isSigned     = true;
-        
+
         return $this->signature;
     }
-    
+
     /**
      * Returns the signature representation of the JWS.
-     * 
+     *
      * @return string
      */
     public function getSignature()
@@ -49,42 +49,42 @@ class JWS extends JWT
         if ($this->isSigned()) {
             return $this->signature;
         }
-        
+
         return null;
     }
-    
+
     /**
      * Checks whether the JSW has already been signed.
-     * 
+     *
      * @return bool
      */
     public function isSigned()
     {
         return (bool) $this->isSigned;
     }
-    
+
     /**
      * Returns the string representing the JWT.
-     * 
+     *
      * @return string
      */
     public function getTokenString()
     {
         $signinInput = parent::generateSigninInput();
-        
+
         return sprintf("%s.%s", $signinInput, base64_encode($this->getSignature()));
     }
-    
+
     /**
      * Creates an instance of a JWS from a JWT.
-     * 
-     * @param string $jwsTokenString
+     *
+     * @param  string          $jwsTokenString
      * @return Namshi\JOSE\JWS
      */
     public static function load($jwsTokenString)
     {
         $parts = explode('.', $jwsTokenString);
-        
+
         if (count($parts) === 3) {
             $header     = json_decode(base64_decode($parts[0]), true);
             $payload    = json_decode(base64_decode($parts[1]), true);
@@ -97,15 +97,15 @@ class JWS extends JWT
                 return $jws;
             }
         }
-        
+
         throw new InvalidArgumentException(sprintf('The token "%s" is an invalid JWS', $jwsTokenString));
     }
-    
+
     /**
      * Verifies that the internal signininput corresponds to the encoded
      * signature previously stored (@see JWS::load).
-     * 
-     * @param string $key
+     *
+     * @param  string $key
      * @return bool
      */
     public function verify($key)
@@ -128,10 +128,10 @@ class JWS extends JWT
     {
         return $this->verify($key) && !$this->isExpired();
     }
-    
+
     /**
      * Returns the base64 encoded signature.
-     * 
+     *
      * @return string
      */
     public function getEncodedSignature()
@@ -141,23 +141,23 @@ class JWS extends JWT
 
     /**
      * Sets the base64 encoded signature.
-     * 
+     *
      * @param string $encodedSignature
      */
     public function setEncodedSignature($encodedSignature)
     {
         $this->encodedSignature = $encodedSignature;
     }
-    
+
     /**
      * Returns the signer responsible to encrypting / decrypting this JWS.
-     * 
+     *
      * @return \Namshi\JOSE\Signer\SignerInterface
      */
     protected function getSigner()
     {
         $signerClass = sprintf("Namshi\\JOSE\\Signer\\%s", $this->header['alg']);
-        
+
         if (class_exists($signerClass)) {
             return new $signerClass();
         }
