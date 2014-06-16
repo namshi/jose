@@ -5,7 +5,7 @@ namespace Namshi\JOSE\Signer;
 /**
  * None Signer
  */
-class none implements SignerInterface
+class None implements SignerInterface
 {
     /**
      * @inheritdoc
