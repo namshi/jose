@@ -2,6 +2,8 @@
 
 namespace Namshi\JOSE;
 
+use Namshi\JOSE\Base64;
+
 /**
  * Class representing a JSON Web Token.
  */
@@ -18,8 +20,8 @@ class JWT
      */
     public function __construct(array $payload, array $header)
     {
-        $this->payload = $payload;
-        $this->header  = $header;
+        $this->setPayload($payload);
+        $this->setHeader($header);
     }
 
     /**
@@ -29,8 +31,8 @@ class JWT
      */
     public function generateSigninInput()
     {
-        $base64payload  = base64_encode(json_encode($this->getPayload()));
-        $base64header   = base64_encode(json_encode($this->getHeader()));
+        $base64header   = Base64::encode(json_encode($this->getHeader()));
+        $base64payload  = Base64::encode(json_encode($this->getPayload()));
 
         return sprintf("%s.%s", $base64header, $base64payload);
     }
@@ -78,5 +80,23 @@ class JWT
     public function setHeader(array $header)
     {
         $this->header = $header;
+    }
+
+    /**
+     * Checks whether the token is expired.
+     *
+     * @return bool
+     */
+    protected function isExpired()
+    {
+        $payload = $this->getPayload();
+
+        if (isset($payload['exp']) && is_numeric($payload['exp'])) {
+            $now            = new \DateTime('now');
+
+            return ($now->format('U') - $payload['exp']) > 0;
+        }
+
+        return false;
     }
 }

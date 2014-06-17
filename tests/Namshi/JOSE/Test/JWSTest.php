@@ -98,4 +98,26 @@ class JWSTest extends TestCase
     {
         JWS::load('test', true);
     }
+
+    public function testTokenWithoutSignature()
+    {
+        $token = new JWS('test');
+        $this->assertNull($token->getSignature());
+    }
+
+    public function testTokenWithoutType()
+    {
+        $token = new JWS('test');
+        $header = $token->getHeader();
+
+        $this->assertEquals($header['typ'], 'JWS');
+    }
+
+    public function testTokenWithType()
+    {
+        $token = new JWS('test', 'foo');
+        $header = $token->getHeader();
+
+        $this->assertEquals($header['typ'], 'foo');
+    }
 }

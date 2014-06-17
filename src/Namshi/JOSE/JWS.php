@@ -3,6 +3,7 @@
 namespace Namshi\JOSE;
 
 use InvalidArgumentException;
+use Namshi\JOSE\Base64;
 
 /**
  * Class representing a JSOn Web Signature.
@@ -21,8 +22,13 @@ class JWS extends JWT
      */
     public function __construct($algorithm, $type = null)
     {
-        $this->header = array('alg' => $algorithm, 'typ' => $type ?: "JWS");
-        $this->setPayload(array());
+        parent::__construct(
+            array(),
+            array(
+                'alg' => $algorithm,
+                'typ' => $type ?: "JWS"
+            )
+        );
     }
 
     /**
@@ -72,7 +78,7 @@ class JWS extends JWT
     {
         $signinInput = parent::generateSigninInput();
 
-        return sprintf("%s.%s", $signinInput, base64_encode($this->getSignature()));
+        return sprintf("%s.%s", $signinInput, Base64::encode($this->getSignature()));
     }
 
     /**
@@ -86,8 +92,8 @@ class JWS extends JWT
         $parts = explode('.', $jwsTokenString);
 
         if (count($parts) === 3) {
-            $header     = json_decode(base64_decode($parts[0]), true);
-            $payload    = json_decode(base64_decode($parts[1]), true);
+            $header     = json_decode(Base64::decode($parts[0]), true);
+            $payload    = json_decode(Base64::decode($parts[1]), true);
 
             if (is_array($header) && is_array($payload)) {
                 $jws        = new self($header['alg'], isset($header['type']) ? $header['type'] : null);
@@ -110,7 +116,7 @@ class JWS extends JWT
      */
     public function verify($key)
     {
-        $decodedSignature   = base64_decode($this->getEncodedSignature());
+        $decodedSignature   = Base64::decode($this->getEncodedSignature());
         $signinInput        = $this->generateSigninInput();
 
         return $this->getSigner()->verify($key, $decodedSignature, $signinInput);
@@ -163,23 +169,5 @@ class JWS extends JWT
         }
 
         throw new InvalidArgumentException(sprintf("The algorithm '%s' is not supported", $this->header['alg']));
-    }
-
-    /**
-     * Checks whether the token is expired.
-     *
-     * @return bool
-     */
-    protected function isExpired()
-    {
-        $payload = $this->getPayload();
-
-        if (isset($payload['exp']) && is_numeric($payload['exp'])) {
-            $now            = new \DateTime('now');
-
-            return ($now->format('U') - $payload['exp']) > 0;
-        }
-
-        return false;
     }
 }
