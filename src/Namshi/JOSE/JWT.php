@@ -29,10 +29,20 @@ class JWT
      */
     public function generateSigninInput()
     {
-        $base64payload  = base64_encode(json_encode($this->getPayload()));
-        $base64header   = base64_encode(json_encode($this->getHeader()));
+        $base64payload  = self::encodeBase64Url(json_encode($this->getPayload()));
+        $base64header   = self::encodeBase64Url(json_encode($this->getHeader()));
 
         return sprintf("%s.%s", $base64header, $base64payload);
+    }
+
+    protected static function encodeBase64Url($data)
+    {
+        return strtr(rtrim(base64_encode($data), '='), '+/', '-_');
+    }
+
+    protected static function decodeBase64Url($data)
+    {
+        return base64_decode(strtr($data, '-_', '+/'));
     }
 
     /**

@@ -72,7 +72,7 @@ class JWS extends JWT
     {
         $signinInput = parent::generateSigninInput();
 
-        return sprintf("%s.%s", $signinInput, base64_encode($this->getSignature()));
+        return sprintf("%s.%s", $signinInput, self::encodeBase64Url($this->getSignature()));
     }
 
     /**
@@ -86,8 +86,8 @@ class JWS extends JWT
         $parts = explode('.', $jwsTokenString);
 
         if (count($parts) === 3) {
-            $header     = json_decode(base64_decode($parts[0]), true);
-            $payload    = json_decode(base64_decode($parts[1]), true);
+            $header     = json_decode(self::decodeBase64Url($parts[0]), true);
+            $payload    = json_decode(self::decodeBase64Url($parts[1]), true);
 
             if (is_array($header) && is_array($payload)) {
                 $jws        = new self($header['alg'], isset($header['type']) ? $header['type'] : null);
@@ -110,7 +110,7 @@ class JWS extends JWT
      */
     public function verify($key)
     {
-        $decodedSignature   = base64_decode($this->getEncodedSignature());
+        $decodedSignature   = self::decodeBase64Url($this->getEncodedSignature());
         $signinInput        = $this->generateSigninInput();
 
         return $this->getSigner()->verify($key, $decodedSignature, $signinInput);
