@@ -29,8 +29,8 @@ class JWT
      */
     public function generateSigninInput()
     {
-        $base64payload  = base64_encode(json_encode($this->getPayload()));
-        $base64header   = base64_encode(json_encode($this->getHeader()));
+        $base64payload = base64_encode(json_encode($this->getPayload()));
+        $base64header  = base64_encode(json_encode($this->getHeader()));
 
         return sprintf("%s.%s", $base64header, $base64payload);
     }
@@ -55,8 +55,8 @@ class JWT
         $this->payload = $payload;
 
         if (!isset($this->payload['iat'])) {
-            $now                    = new \DateTime('now');
-            $this->payload['iat']   = $now->format('U');
+            $now                  = new \DateTime('now');
+            $this->payload['iat'] = $now->format('U');
         }
     }
 
