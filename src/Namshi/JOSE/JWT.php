@@ -2,13 +2,29 @@
 
 namespace Namshi\JOSE;
 
+use Namshi\JOSE\Base64\Base64UrlSafeEncoder;
+use Namshi\JOSE\Base64\Encoder;
+
 /**
  * Class representing a JSON Web Token.
  */
 class JWT
 {
+
+    /**
+     * @var array
+     */
     protected $payload;
+
+    /**
+     * @var array
+     */
     protected $header;
+
+    /**
+     * @var Encoder
+     */
+    protected $encoder;
 
     /**
      * Constructor
@@ -20,6 +36,15 @@ class JWT
     {
         $this->payload = $payload;
         $this->header  = $header;
+        $this->encoder = new Base64UrlSafeEncoder();
+    }
+
+    /**
+     * @param Encoder $encoder
+     */
+    public function setEncoder(Encoder $encoder)
+    {
+        $this->encoder = $encoder;
     }
 
     /**
@@ -29,8 +54,8 @@ class JWT
      */
     public function generateSigninInput()
     {
-        $base64payload = base64_encode(json_encode($this->getPayload()));
-        $base64header  = base64_encode(json_encode($this->getHeader()));
+        $base64payload = $this->encoder->encode(json_encode($this->getPayload()));
+        $base64header  = $this->encoder->encode(json_encode($this->getHeader()));
 
         return sprintf("%s.%s", $base64header, $base64payload);
     }
