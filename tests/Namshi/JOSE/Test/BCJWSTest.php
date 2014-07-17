@@ -2,6 +2,7 @@
 
 namespace Namshi\JOSE\Test;
 
+use Namshi\JOSE\Base64\Base64Encoder;
 use Namshi\JOSE\JWS;
 use PHPUnit_Framework_TestCase as TestCase;
 
@@ -15,14 +16,15 @@ class BCJWSTest extends TestCase
 
     public function testTestBC()
     {
-        $data = [
-            ["order_nr" => "ae123123"],
-            ["username" => "asdasdasd"],
-            ["anything" => "!@#$%^&*()_+"]
-        ];
+        $data = array(
+            array("order_nr" => "ae123123"),
+            array("username" => "asdasdasd"),
+            array("anything" => "!@#$%^&*()_+")
+        );
 
         foreach ($data as $payload) {
-            $jwsOld = new JWSBase64("RS256");
+            $jwsOld = new JWS("RS256");
+            $jwsOld->setEncoder(new Base64Encoder());
             $jwsOld->setPayload($payload);
             $jwsOld->sign(openssl_pkey_get_private(SSL_KEYS_PATH . "private.key", self::SSL_KEY_PASSPHRASE));
 
@@ -31,21 +33,6 @@ class BCJWSTest extends TestCase
             $jwsNew = JWS::load($t);
             $this->assertTrue($jwsNew->verify(openssl_pkey_get_public(SSL_KEYS_PATH . "public.key")));
         }
-    }
-
-}
-
-class JWSBase64 extends JWS
-{
-
-    protected static function base64decode($data)
-    {
-        return base64_decode($data);
-    }
-
-    protected static function base64encode($data)
-    {
-        return base64_encode($data);
     }
 
 }
