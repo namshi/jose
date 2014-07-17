@@ -3,6 +3,8 @@
 namespace Namshi\JOSE;
 
 use InvalidArgumentException;
+use Namshi\JOSE\Base64\Base64Encoder;
+use Namshi\JOSE\Base64\Base64UrlSafeEncoder;
 use Namshi\JOSE\Signer\SignerInterface;
 
 /**
@@ -17,12 +19,12 @@ class JWS extends JWT
     /**
      * Constructor
      *
-     * @param array $algorithm
-     * @param array $type
+     * @param string $algorithm
+     * @param string $type
      */
     public function __construct($algorithm, $type = null)
     {
-        parent::__construct(array(), array('alg' => $algorithm, 'typ' => $type ?: "JWS"));
+        parent::__construct(array(), array('alg' => $algorithm, 'type' => $type ?: "JWS"));
     }
 
     /**
@@ -70,9 +72,9 @@ class JWS extends JWT
      */
     public function getTokenString()
     {
-        $signinInput = parent::generateSigninInput();
+        $signinInput = $this->generateSigninInput();
 
-        return sprintf("%s.%s", $signinInput, base64_encode($this->getSignature()));
+        return sprintf("%s.%s", $signinInput, $this->encoder->encode($this->getSignature()));
     }
 
     /**
@@ -84,14 +86,16 @@ class JWS extends JWT
      */
     public static function load($jwsTokenString)
     {
-        $parts = explode('.', $jwsTokenString);
+        $encoder = strpbrk($jwsTokenString, '+/=') ? new Base64Encoder() : new Base64UrlSafeEncoder();
+        $parts   = explode('.', $jwsTokenString);
 
         if (count($parts) === 3) {
-            $header  = json_decode(base64_decode($parts[0]), true);
-            $payload = json_decode(base64_decode($parts[1]), true);
+            $header  = json_decode($encoder->decode($parts[0]), true);
+            $payload = json_decode($encoder->decode($parts[1]), true);
 
             if (is_array($header) && is_array($payload)) {
                 $jws = new self($header['alg'], isset($header['type']) ? $header['type'] : null);
+                $jws->setEncoder($encoder);
                 $jws->setPayload($payload);
                 $jws->setEncodedSignature($parts[2]);
 
@@ -111,7 +115,7 @@ class JWS extends JWT
      */
     public function verify($key)
     {
-        $decodedSignature = base64_decode($this->getEncodedSignature());
+        $decodedSignature = $this->encoder->decode($this->getEncodedSignature());
         $signinInput      = $this->generateSigninInput();
 
         return $this->getSigner()->verify($key, $decodedSignature, $signinInput);
