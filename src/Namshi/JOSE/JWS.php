@@ -24,7 +24,7 @@ class JWS extends JWT
      */
     public function __construct($algorithm, $type = null)
     {
-        parent::__construct(array(), array('alg' => $algorithm, 'type' => $type ?: "JWS"));
+        parent::__construct(array(), array('alg' => $algorithm, 'typ' => $type ?: "JWS"));
     }
 
     /**
@@ -94,7 +94,7 @@ class JWS extends JWT
             $payload = json_decode($encoder->decode($parts[1]), true);
 
             if (is_array($header) && is_array($payload)) {
-                $jws = new self($header['alg'], isset($header['type']) ? $header['type'] : null);
+                $jws = new self($header['alg'], isset($header['typ']) ? $header['typ'] : null);
                 $jws->setEncoder($encoder);
                 $jws->setPayload($payload);
                 $jws->setEncodedSignature($parts[2]);
