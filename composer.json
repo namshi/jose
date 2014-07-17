@@ -6,6 +6,7 @@
         "satooshi/php-coveralls": "dev-master"
     },
     "license": "MIT",
+    "keywords": ["jws", "jwt", "json", "json web token", "json web signature", "token"],
     "authors": [
         {
             "name": "Alessandro Nadalin",
