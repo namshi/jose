@@ -53,8 +53,8 @@ if ($username == 'correctUsername' && $pass == 'ok') {
 		'uid' => $user->getid(),
 	));
 
-    $privateKey = openssl_pkey_get_private("file://path/to/private.key", self::SSL_KEY_PASSPHRASE);;
-    $jws->sign($privateKey)
+    $privateKey = openssl_pkey_get_private("file://path/to/private.key", self::SSL_KEY_PASSPHRASE);
+    $jws->sign($privateKey);
     setcookie('identity', $jws->getTokenString());
 }
 ```
