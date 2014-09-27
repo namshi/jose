@@ -38,7 +38,7 @@ and then pass it from your JavaScript app
 everytime you want to authenticate that
 user.
 
-First, generate the JSW:
+First, generate the JWS:
 
 ``` php
 <?php
