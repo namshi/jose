@@ -10,6 +10,10 @@ class ES384Test extends TestCase
 
     public function setup()
     {
+        // https://github.com/sebastianbergmann/phpunit/issues/1356
+        if (defined('HHVM_VERSION')) {
+            $this->markTestSkipped();
+        }
         $this->privateKey = openssl_pkey_get_private(SSL_KEYS_PATH . "private.es384.key", 'tests');
         $this->public = openssl_pkey_get_public(SSL_KEYS_PATH . "public.es384.key");
         $this->signer = new ES384;
