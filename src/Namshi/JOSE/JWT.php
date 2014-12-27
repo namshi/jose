@@ -45,6 +45,8 @@ class JWT
     public function setEncoder(Encoder $encoder)
     {
         $this->encoder = $encoder;
+
+        return $this;
     }
 
     /**
@@ -83,6 +85,8 @@ class JWT
             $now                  = new \DateTime('now');
             $this->payload['iat'] = $now->format('U');
         }
+
+        return $this;
     }
 
     /**
@@ -103,5 +107,7 @@ class JWT
     public function setHeader(array $header)
     {
         $this->header = $header;
+
+        return $this;
     }
 }
