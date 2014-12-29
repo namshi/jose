@@ -46,7 +46,10 @@ abstract class PublicKey implements SignerInterface
     protected function supportsKey($key)
     {
         if (!is_resource($key)) {
-            return false;
+            $key = openssl_pkey_get_public($key) ?: openssl_pkey_get_private($key);
+            if (!$key) {
+               return false;
+            }
         }
         // OpenSSL 0.9.8+
         $keyDetails = openssl_pkey_get_details($key);
