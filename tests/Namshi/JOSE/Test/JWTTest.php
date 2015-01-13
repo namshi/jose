@@ -17,4 +17,27 @@ class JWTTest extends TestCase
 
         $this->assertEquals(sprintf("%s.%s", $encoder->encode(json_encode($payload)), $encoder->encode(json_encode($header))), $jwt->generateSigninInput());
     }
+
+    public function testPayload()
+    {
+        $jwt = new JWT(array('a' => 'b'), array());
+        $payload = $jwt->getPayload();
+
+        $this->assertSame($payload['a'], 'b');
+        $this->assertRegExp('/^\d+$/', $payload['iat'], 'iat property has integer value (from construction)');
+
+        $jwt = new JWT(array('a' => 'b'), array());
+        $jwt->setPayload(array('b' => 'a'));
+        $payload = $jwt->getPayload();
+
+        $this->assertSame($payload['b'], 'a');
+        $this->assertRegExp('/^\d+$/', $payload['iat'], 'iat property has integer value (from set)');
+
+        $jwt = new JWT(array('a' => 'b'), array());
+        $jwt->setPayload(array('b' => 'a'), false);
+        $payload = $jwt->getPayload();
+
+        $this->assertSame($payload['b'], 'a');
+        $this->assertFalse(isset($payload['iat']), 'no iat property (from set with auto claim off)');
+    }
 }
