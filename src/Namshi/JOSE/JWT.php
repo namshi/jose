@@ -34,9 +34,9 @@ class JWT
      */
     public function __construct(array $payload, array $header)
     {
-        $this->payload = $payload;
-        $this->header  = $header;
-        $this->encoder = new Base64UrlSafeEncoder();
+        $this->setPayload($payload);
+        $this->setHeader($header);
+        $this->setEncoder(new Base64UrlSafeEncoder());
     }
 
     /**
@@ -76,14 +76,17 @@ class JWT
      * Sets the payload of the current JWT.
      *
      * @param array $payload
+     * @param bool $autoClaims
      */
-    public function setPayload(array $payload)
+    public function setPayload(array $payload, $autoClaims = true)
     {
         $this->payload = $payload;
 
-        if (!isset($this->payload['iat'])) {
-            $now                  = new \DateTime('now');
-            $this->payload['iat'] = $now->format('U');
+        if ($autoClaims) {
+            if (!isset($this->payload['iat'])) {
+                $now                  = new \DateTime('now');
+                $this->payload['iat'] = $now->format('U');
+            }
         }
 
         return $this;
