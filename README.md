@@ -11,7 +11,7 @@ implementation of the JWS
 
 ## Prerequisites
 
-This library needs PHP 5.3+ and the library OpenSSL.
+This library needs PHP 5.4+ and the library OpenSSL.
 
 It has been tested using `PHP5.3` to `PHP5.6` and `HHVM`.
 
@@ -22,7 +22,7 @@ You can install the library directly from
 composer / [packagist](https://packagist.org/packages/namshi/jose):
 
 ```
-"namshi/jose": "1.0.*"
+"namshi/jose": "2.0.*"
 ```
 
 ## Usage
