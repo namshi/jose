@@ -5,6 +5,7 @@ namespace Namshi\JOSE\Test;
 use PHPUnit_Framework_TestCase as TestCase;
 use Namshi\JOSE\JWS;
 use DateTime;
+use Prophecy\Argument;
 
 class JWSTest extends TestCase
 {
@@ -83,6 +84,20 @@ class JWSTest extends TestCase
         $this->assertTrue($jws->isValid($public_key));
     }
 
+    public function testUseOfCustomEncoder()
+    {
+        $encoder = $this->prophesize('Namshi\JOSE\Base64\Encoder');
+        $encoder
+            ->decode(Argument::any())
+            ->willReturn('{"whatever": "the payload should be"}')
+            ->shouldBeCalled();
+        $encoder
+            ->decode(Argument::any())
+            ->willReturn('{"alg": "test"}')
+            ->shouldBeCalled();
+        JWS::load($this->jws->getTokenString(), false, $encoder->reveal());
+    }
+
     public function testValidationOfInvalidJWS()
     {
         $date       = new DateTime('yesterday');
@@ -117,7 +132,7 @@ class JWSTest extends TestCase
         $privateKey = openssl_pkey_get_private(SSL_KEYS_PATH . "private.key", self::SSL_KEY_PASSPHRASE);
         $this->jws->sign($privateKey);
 
-        $jws        = JWS::load('eyJhbGciOiJ0ZXN0In0=.eyJhbGciOiJ0ZXN0In0=.eyJhbGciOiJ0ZXN0In0=', true);
+        $jws        = JWS::load('eyJhbGciOiJ0ZXN0In0=.eyJhbGciOiJ0ZXN0In0=.eyJhbGciOiJ0ZXN0In0=');
         $public_key = openssl_pkey_get_public(SSL_KEYS_PATH . "public.key");
         $this->assertFalse($jws->verify($public_key));
     }
@@ -127,7 +142,7 @@ class JWSTest extends TestCase
      */
     public function testLoadingAMalformedTokenString()
     {
-        JWS::load('test.Test.TEST', true);
+        JWS::load('test.Test.TEST');
     }
 
     /**
@@ -135,6 +150,6 @@ class JWSTest extends TestCase
      */
     public function testLoadingAMalformedTokenString2()
     {
-        JWS::load('test', true);
+        JWS::load('test');
     }
 }
