@@ -26,9 +26,34 @@ class JWSTest extends TestCase
         $privateKey = openssl_pkey_get_private(SSL_KEYS_PATH . "private.key", self::SSL_KEY_PASSPHRASE);
         $this->jws->sign($privateKey);
 
-        $jws        = JWS::load($this->jws->getTokenString());
+        $jws        = JWS::load($this->jws->getTokenString(), "RS256");
         $public_key = openssl_pkey_get_public(SSL_KEYS_PATH . "public.key");
         $this->assertTrue($jws->verify($public_key));
+
+        $payload = $jws->getPayload();
+        $this->assertEquals('b', $payload['a']);
+    }
+
+    public function testVerifyingYouCannotBypassTheTokenVerificationWithTheNoneSigner()
+    {
+        $privateKey = openssl_pkey_get_private(SSL_KEYS_PATH . "private.key", self::SSL_KEY_PASSPHRASE);
+        $this->jws->sign($privateKey);
+
+        $jws        = JWS::load($this->jws->getTokenString(), "None");
+        $public_key = openssl_pkey_get_public(SSL_KEYS_PATH . "public.key");
+        $this->assertFalse($jws->verify($public_key));
+
+        $payload = $jws->getPayload();
+        $this->assertEquals('b', $payload['a']);
+    }
+
+    public function testVerifyingYouCannotBypassTheTokenVerificationWithOtherSigners()
+    {
+        $privateKey = openssl_pkey_get_private(SSL_KEYS_PATH . "private.key", self::SSL_KEY_PASSPHRASE);
+        $this->jws->sign($privateKey);
+
+        $jws        = JWS::load($this->jws->getTokenString(), "HS256");
+        $this->assertFalse($jws->verify('aaa'));
 
         $payload = $jws->getPayload();
         $this->assertEquals('b', $payload['a']);
@@ -39,7 +64,7 @@ class JWSTest extends TestCase
         $privateKey = openssl_pkey_get_private(SSL_KEYS_PATH . "private.key", self::SSL_KEY_PASSPHRASE);
         $this->jws->sign($privateKey);
 
-        $jws        = JWS::load($this->jws->getTokenString());
+        $jws        = JWS::load($this->jws->getTokenString(), "RS256");
         $public_key = openssl_pkey_get_public(SSL_KEYS_PATH . "public.key");
         $this->assertTrue($jws->isValid($public_key));
     }
@@ -53,7 +78,7 @@ class JWSTest extends TestCase
         $privateKey = openssl_pkey_get_private(SSL_KEYS_PATH . "private.key", self::SSL_KEY_PASSPHRASE);
         $this->jws->sign($privateKey);
 
-        $jws        = JWS::load($this->jws->getTokenString());
+        $jws        = JWS::load($this->jws->getTokenString(), "RS256");
         $public_key = openssl_pkey_get_public(SSL_KEYS_PATH . "public.key");
         $this->assertFalse($jws->isValid($public_key));
     }

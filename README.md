@@ -70,7 +70,7 @@ is a valid call:
 
 use Namshi\JOSE\JWS;
 
-$jws        = JWS::load($_COOKIE['identity']);
+$jws        = JWS::load($_COOKIE['identity'], 'RS256');
 $public_key = openssl_pkey_get_public("/path/to/public.key");
 
 // verify that the token is valid and had the same values

@@ -30,7 +30,7 @@ class BCJWSTest extends TestCase
 
             $t = $jwsOld->getTokenString();
 
-            $jwsNew = JWS::load($t);
+            $jwsNew = JWS::load($t, "RS256");
             $this->assertTrue($jwsNew->verify(openssl_pkey_get_public(SSL_KEYS_PATH . "public.key")));
         }
     }
