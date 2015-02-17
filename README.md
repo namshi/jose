@@ -22,7 +22,7 @@ You can install the library directly from
 composer / [packagist](https://packagist.org/packages/namshi/jose):
 
 ```
-"namshi/jose": "2.0.*"
+"namshi/jose": "2.1.*"
 ```
 
 ## Usage
@@ -110,8 +110,9 @@ JWS::load($this->jws->getTokenString(), true);
 This allows tokens signed with the 'none' algorithms to go through, which is something
 you probably don't want to do. Proceed with caution :)
 
-**Unsecure JWSes are disabled by default since version 2.1.12. You should not
-use previous versions.**
+**Unsecure JWSes are disabled by default since version 2.1.2. You should not
+use previous versions other than 1.0.2, 1.1.2, 2.0.3 as they are vulnerable
+to a security vulnerability.**
 
 ## Credits
 
