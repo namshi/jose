@@ -21,6 +21,40 @@ class JWSTest extends TestCase
         $this->jws->setPayload($data);
     }
 
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testLoadingUnsecureJws()
+    {
+        $date       = new DateTime('tomorrow');
+        $data       = array(
+            'a'     => 'b',
+            'exp'   => $date->format('U')
+        );
+        $this->jws  = new JWS('None');
+        $this->jws->setPayload($data);
+        $this->jws->sign('111');
+        $jws        = JWS::load($this->jws->getTokenString());
+        $this->assertFalse($jws->verify('111'));
+        $payload = $jws->getPayload();
+        $this->assertEquals('b', $payload['a']);
+    }
+    public function testAllowingUnsecureJws()
+    {
+        $date       = new DateTime('tomorrow');
+        $data       = array(
+            'a'     => 'b',
+            'exp'   => $date->format('U')
+        );
+        $this->jws  = new JWS('None');
+        $this->jws->setPayload($data);
+        $this->jws->sign('111');
+        $jws        = JWS::load($this->jws->getTokenString(), true);
+        $this->assertTrue($jws->verify('111'));
+        $payload = $jws->getPayload();
+        $this->assertEquals('b', $payload['a']);
+    }
+
     public function testVerificationRS256()
     {
         $privateKey = openssl_pkey_get_private(SSL_KEYS_PATH . "private.key", self::SSL_KEY_PASSPHRASE);
