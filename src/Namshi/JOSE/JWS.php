@@ -84,7 +84,7 @@ class JWS extends JWT
      * @return JWS
      * @throws \InvalidArgumentException
      */
-    public static function load($jwsTokenString)
+    public static function load($jwsTokenString, $allowUnsecure = false)
     {
         $encoder = strpbrk($jwsTokenString, '+/=') ? new Base64Encoder() : new Base64UrlSafeEncoder();
         $parts   = explode('.', $jwsTokenString);
@@ -94,6 +94,10 @@ class JWS extends JWT
             $payload = json_decode($encoder->decode($parts[1]), true);
 
             if (is_array($header) && is_array($payload)) {
+                if ($header['alg'] === 'None' && !$allowUnsecure) {
+                    throw new InvalidArgumentException(sprintf('The token "%s" cannot be validated in a secure context, as it uses the unallowed "none" algorithm', $jwsTokenString));
+                }
+
                 $jws = new self($header['alg'], isset($header['typ']) ? $header['typ'] : null);
                 $jws->setEncoder($encoder);
                 $jws->setPayload($payload);
