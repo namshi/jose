@@ -101,7 +101,7 @@ $this->jws->setPayload(array(
 ### Unsecure JWSes
 
 You can allow [unsecure JWSes](https://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-40#page-12)
-by settng the `$allowUnsecure` flag while loading JWSes:
+by setting the `$allowUnsecure` flag while loading JWSes:
 
 ``` php
 JWS::load($this->jws->getTokenString(), true);
