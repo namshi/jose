@@ -111,8 +111,8 @@ This allows tokens signed with the 'none' algorithms to go through, which is som
 you probably don't want to do. Proceed with caution :)
 
 **Unsecure JWSes are disabled by default since version 2.1.2. You should not
-use previous versions other than 1.0.2, 1.1.2, 2.0.3 as they are vulnerable
-to a security vulnerability. More info [here](http://tech.namshi.com/blog/2015/02/19/update-your-namshi-slash-jose-installations-as-a-security-vulnerability-was-found/).**
+use previous versions other than 1.0.2, 1.1.2, 2.0.3 as they have a security
+vulnerability. More info [here](http://tech.namshi.com/blog/2015/02/19/update-your-namshi-slash-jose-installations-as-a-security-vulnerability-was-found/).**
 
 ## Using a custom encoder
 
