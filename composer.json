@@ -2,7 +2,7 @@
     "name": "namshi/jose",
     "description": "JSON Object Signing and Encryption library for PHP.",
     "require-dev": {
-        "phpunit/phpunit": "4.*",
+        "phpunit/phpunit": "~4.5",
         "satooshi/php-coveralls": "dev-master"
     },
     "license": "MIT",

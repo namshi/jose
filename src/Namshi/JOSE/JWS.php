@@ -6,6 +6,7 @@ use InvalidArgumentException;
 use Namshi\JOSE\Base64\Base64Encoder;
 use Namshi\JOSE\Base64\Base64UrlSafeEncoder;
 use Namshi\JOSE\Signer\SignerInterface;
+use Namshi\JOSE\Base64\Encoder;
 
 /**
  * Class representing a JSOn Web Signature.
@@ -84,9 +85,11 @@ class JWS extends JWT
      * @return JWS
      * @throws \InvalidArgumentException
      */
-    public static function load($jwsTokenString, $allowUnsecure = false)
+    public static function load($jwsTokenString, $allowUnsecure = false, Encoder $encoder = null)
     {
-        $encoder = strpbrk($jwsTokenString, '+/=') ? new Base64Encoder() : new Base64UrlSafeEncoder();
+        if ($encoder === null) {
+            $encoder = strpbrk($jwsTokenString, '+/=') ? new Base64Encoder() : new Base64UrlSafeEncoder();
+        }
         $parts   = explode('.', $jwsTokenString);
 
         if (count($parts) === 3) {

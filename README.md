@@ -101,7 +101,7 @@ $this->jws->setPayload(array(
 ### Unsecure JWSes
 
 You can allow [unsecure JWSes](https://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms-40#page-12)
-by settng the `$allowUnsecure` flag while loading JWSes:
+by setting the `$allowUnsecure` flag while loading JWSes:
 
 ``` php
 JWS::load($this->jws->getTokenString(), true);
@@ -111,8 +111,14 @@ This allows tokens signed with the 'none' algorithms to go through, which is som
 you probably don't want to do. Proceed with caution :)
 
 **Unsecure JWSes are disabled by default since version 2.1.2. You should not
-use previous versions other than 1.0.2, 1.1.2, 2.0.3 as they are vulnerable
-to a security vulnerability. More info [here](http://tech.namshi.com/blog/2015/02/19/update-your-namshi-slash-jose-installations-as-a-security-vulnerability-was-found/).**
+use previous versions other than 1.0.2, 1.1.2, 2.0.3 as they have a security
+vulnerability. More info [here](http://tech.namshi.com/blog/2015/02/19/update-your-namshi-slash-jose-installations-as-a-security-vulnerability-was-found/).**
+
+## Using a custom encoder
+
+If, for some reason, you need to encode the token in a different way, you can
+inject any implementation of `Namshi\JOSE\Base64\Encoder` in a `JWS` instance.
+Likewise, `JWS::load()` accepts such an implementation as a second argument.
 
 ## Credits
 
