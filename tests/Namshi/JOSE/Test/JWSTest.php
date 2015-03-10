@@ -152,4 +152,29 @@ class JWSTest extends TestCase
     {
         JWS::load('test');
     }
+
+    public function testSignAndVerifyWithFalsePublicKey()
+    {
+        $public_key = false;
+        $jwsHMAC    = new JWS('HS256');
+
+        $jwsHMAC->sign(false);
+        $jws = JWS::load($jwsHMAC->getTokenString());
+
+        $this->assertFalse($jws->verify($public_key));
+
+    }
+
+    public function testSignAndVerifyWithEmptyStringPublicKey()
+    {
+        $public_key = false;
+        $jwsHMAC    = new JWS('HS256');
+
+        $jwsHMAC->sign('');
+        $jws = JWS::load($jwsHMAC->getTokenString());
+
+        $this->assertFalse($jws->verify($public_key));
+
+    }
+
 }

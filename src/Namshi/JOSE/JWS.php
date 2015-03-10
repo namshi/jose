@@ -122,6 +122,10 @@ class JWS extends JWT
      */
     public function verify($key)
     {
+        if (empty($key)) {
+            return false;
+        }
+
         $decodedSignature = $this->encoder->decode($this->getEncodedSignature());
         $signinInput      = $this->generateSigninInput();
 
