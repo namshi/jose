@@ -60,6 +60,32 @@ class JWSTest extends TestCase
         $payload = $jws->getPayload();
         $this->assertEquals('b', $payload['a']);
     }
+    
+    public function testRestrictingTheAlgorithmsKo()
+    {
+        $this->jws  = new JWS('HS256');
+        $this->jws->sign('12345');
+
+        $jws        = JWS::load($this->jws->getTokenString());
+        $this->assertFalse($jws->verify('12345', 'RS256'));
+        $this->assertFalse($jws->isValid('12345', 'RS256'));
+    }
+    
+    public function testRestrictingTheAlgorithmsOk()
+    {
+        $date       = new DateTime('tomorrow');
+        $data       = array(
+            'a'     => 'b',
+            'exp'   => $date->format('U')
+        );
+        $this->jws  = new JWS('HS256');
+        $this->jws->setPayload($data);
+        $this->jws->sign('123');
+
+        $jws        = JWS::load($this->jws->getTokenString());
+        $this->assertTrue($jws->verify('123', 'HS256'));
+        $this->assertTrue($jws->isValid('123', 'HS256'));
+    }
 
     public function testVerificationRS256()
     {

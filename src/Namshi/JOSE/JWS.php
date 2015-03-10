@@ -118,11 +118,12 @@ class JWS extends JWT
      * signature previously stored (@see JWS::load).
      *
      * @param resource|string $key
+     * @param string $algo The algorithms this JWS should be signed with. Use it if you want to restrict which algorithms you want to allow to be validated.
      * @return bool
      */
-    public function verify($key)
+    public function verify($key, $algo = null)
     {
-        if (empty($key)) {
+        if (empty($key) || ($algo && $this->header['alg'] !== $algo)) {
             return false;
         }
 
@@ -137,11 +138,13 @@ class JWS extends JWT
      * and the token is not expired.
      *
      * @param resource|string $key
+     * @param string $algo The algorithms this JWS should be signed with. Use it if you want to restrict which algorithms you want to allow to be validated.
+     * 
      * @return bool
      */
-    public function isValid($key)
+    public function isValid($key, $algo = null)
     {
-        return $this->verify($key) && ! $this->isExpired();
+        return $this->verify($key, $algo) && ! $this->isExpired();
     }
 
     /**

@@ -75,12 +75,16 @@ $public_key = openssl_pkey_get_public("/path/to/public.key");
 
 // verify that the token is valid and had the same values
 // you emitted before while setting it as a cookie
-if ($jws->isValid($public_key)) {
+if ($jws->isValid($public_key, 'RS256')) {
 	$payload = $jws->getPayload();
 
 	echo sprintf("Hey, my JS app just did an action authenticated as user #%s", $payload['id']);
 }
 ```
+
+> PROTIP: you can omit the second argument of the isValid() method, so jose will try to validate the token with the algorithm specified in the token's header, though this might expose you to some security issues.
+>
+> For now we recommend to always explicitely set the algorithm you want to use to validate tokens.
 
 ## Under the hood
 
