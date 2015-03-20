@@ -1,6 +1,7 @@
 <?php
 
-namespace Namshi\JOSE\Signer;
+namespace Namshi\JOSE\Signer\OpenSSL;
+use Namshi\JOSE\Signer\SignerInterface;
 
 /**
  * This class is the base of all HMAC Signers

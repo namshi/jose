@@ -1,22 +1,17 @@
 <?php
 
-namespace Namshi\JOSE\Test\Signer;
+namespace Namshi\JOSE\Test\OpenSSL\Signer;
 
 use \PHPUnit_Framework_TestCase as TestCase;
-use Namshi\JOSE\Signer\ES384;
+use Namshi\JOSE\Signer\OpenSSL\RS512;
 
-class ES384Test extends TestCase
+class RS512Test extends TestCase
 {
-
     public function setup()
     {
-        // https://github.com/sebastianbergmann/phpunit/issues/1356
-        if (defined('HHVM_VERSION')) {
-            $this->markTestSkipped();
-        }
-        $this->privateKey = openssl_pkey_get_private(SSL_KEYS_PATH . "private.es384.key", 'tests');
-        $this->public = openssl_pkey_get_public(SSL_KEYS_PATH . "public.es384.key");
-        $this->signer = new ES384;
+        $this->privateKey   = openssl_pkey_get_private(SSL_KEYS_PATH . "private.key", 'tests');
+        $this->public       = openssl_pkey_get_public(SSL_KEYS_PATH . "public.key");
+        $this->signer       = new RS512;
     }
 
     public function testVerificationWorksProperly()
@@ -30,5 +25,4 @@ class ES384Test extends TestCase
     {
         $this->assertInternalType('string', $this->signer->sign('aaa', $this->privateKey));
     }
-
 }
