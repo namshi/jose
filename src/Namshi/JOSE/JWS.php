@@ -17,6 +17,7 @@ class JWS extends JWT
     protected $isSigned = false;
     protected $encodedSignature;
     protected $encryptionEngine;
+    protected $supportedEncryptionEngines = array('OpenSSL', 'SecLib');
 
     /**
      * Constructor
@@ -27,8 +28,8 @@ class JWS extends JWT
      */
     public function __construct($algorithm, $type = null, $encryptionEngine = "OpenSSL")
     {
-        if ($encryptionEngine != "OpenSSL" and $encryptionEngine != "SecLib") {
-            throw new InvalidArgumentException(sprintf("Encryption engine %s is unsupported", $encryptionEngine));
+        if (!in_array($encryptionEngine, $this->supportedEncryptionEngines)) {
+            throw new InvalidArgumentException(sprintf("Encryption engine %s is not supported", $encryptionEngine));
         }
         $this->encryptionEngine = $encryptionEngine;
         parent::__construct(array(), array('alg' => $algorithm, 'typ' => $type ?: "JWS"));
