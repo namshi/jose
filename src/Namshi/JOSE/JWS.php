@@ -90,7 +90,8 @@ class JWS extends JWT
         if ($encoder === null) {
             $encoder = strpbrk($jwsTokenString, '+/=') ? new Base64Encoder() : new Base64UrlSafeEncoder();
         }
-        $parts   = explode('.', $jwsTokenString);
+        
+        $parts = explode('.', $jwsTokenString);
 
         if (count($parts) === 3) {
             $header  = json_decode($encoder->decode($parts[0]), true);
@@ -102,9 +103,10 @@ class JWS extends JWT
                 }
 
                 $jws = new self($header['alg'], isset($header['typ']) ? $header['typ'] : null);
-                $jws->setEncoder($encoder);
-                $jws->setPayload($payload);
-                $jws->setEncodedSignature($parts[2]);
+                
+                $jws->setEncoder($encoder)
+                    ->setPayload($payload)
+                    ->setEncodedSignature($parts[2]);
 
                 return $jws;
             }
@@ -160,11 +162,14 @@ class JWS extends JWT
     /**
      * Sets the base64 encoded signature.
      *
-     * @param string $encodedSignature
+     * @param  string $encodedSignature
+     * @return JWS
      */
     public function setEncodedSignature($encodedSignature)
     {
         $this->encodedSignature = $encodedSignature;
+        
+        return $this;
     }
 
     /**
