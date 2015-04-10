@@ -105,6 +105,7 @@ class JWS extends JWT
                 $jws = new self($header['alg'], isset($header['typ']) ? $header['typ'] : null);
                 
                 $jws->setEncoder($encoder)
+                    ->setHeader($header)
                     ->setPayload($payload)
                     ->setEncodedSignature($parts[2]);
 
