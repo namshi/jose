@@ -60,7 +60,7 @@ class JWSTest extends TestCase
         $payload = $jws->getPayload();
         $this->assertEquals('b', $payload['a']);
     }
-    
+
     public function testRestrictingTheAlgorithmsKo()
     {
         $this->jws  = new JWS('HS256');
@@ -70,7 +70,7 @@ class JWSTest extends TestCase
         $this->assertFalse($jws->verify('12345', 'RS256'));
         $this->assertFalse($jws->isValid('12345', 'RS256'));
     }
-    
+
     public function testRestrictingTheAlgorithmsOk()
     {
         $date       = new DateTime('tomorrow');
@@ -201,6 +201,23 @@ class JWSTest extends TestCase
 
         $this->assertFalse($jws->verify($public_key));
 
+    }
+
+    public function testLoadingWithAnyOrderOfHeaders()
+    {
+        $privateKey = openssl_pkey_get_private(SSL_KEYS_PATH . "private.key", self::SSL_KEY_PASSPHRASE);
+        $public_key = openssl_pkey_get_public(SSL_KEYS_PATH . "public.key");
+
+        $header = $this->jws->getHeader();
+        $reversedHeader = array_reverse($header);
+        $this->assertFalse($header === $reversedHeader);
+
+        $this->jws->setHeader($reversedHeader);
+        $this->jws->sign($privateKey);
+
+        $tokenString = $this->jws->getTokenString();
+        $jws = JWS::load($tokenString);
+        $this->assertTrue($reversedHeader === $jws->getHeader());
     }
 
 }
