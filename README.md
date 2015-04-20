@@ -86,6 +86,36 @@ if ($jws->isValid($public_key, 'RS256')) {
 >
 > For now we recommend to always explicitely set the algorithm you want to use to validate tokens.
 
+### PHPSECLIB For RSA Verification
+
+You may find that you need to use this library in an environment where 
+[PHP's wrappers for OpenSSL](http://php.net/manual/en/ref.openssl.php) 
+do not work, or OpenSSL simply is not installed.  This library uses
+OpenSSL to encrypt by default, but you can specify that you want to use [PHPSecLib](http://phpseclib.sourceforge.net/) for a pure PHP 
+implementation of RSA encryption.  
+
+In these cases, simply add the optional `'SecLib'` parameter when
+constructing a JWS:
+
+```php
+$jws = new JWS('RS256', 'JWS', 'SecLib');
+```
+
+You can now use the PHPSecLib implmentaiton of RSA signing.  If you use 
+a password protected private key, you can still submit the private key 
+to use for signing as a string, as long as if you pass the password as the 
+second parameter into the `sign` method:
+
+```php
+$jws->sign(file_get_contents(SSL_KEYS_PATH . "private.key"), 'tests');
+```
+
+You may also load a JWS using the PHPSecLib implementation of RSA verification:
+
+```php
+$jws = JWS::load($tokenString, false, $encoder, 'SecLib');
+```
+
 ## Under the hood
 
 In order to [validate the JWS](https://github.com/namshi/jose/blob/master/src/Namshi/JOSE/JWS.php#L126),
