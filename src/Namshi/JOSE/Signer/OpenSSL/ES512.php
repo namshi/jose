@@ -1,6 +1,6 @@
 <?php
 
-namespace Namshi\JOSE\Signer;
+namespace Namshi\JOSE\Signer\OpenSSL;
 
 /**
  * Class responsible to sign inputs with the ECDSA algorithm, after hashing it.

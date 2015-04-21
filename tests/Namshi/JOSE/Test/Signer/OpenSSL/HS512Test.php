@@ -1,9 +1,9 @@
 <?php
 
-namespace Namshi\JOSE\Test\Signer;
+namespace Namshi\JOSE\Test\OpenSSL\Signer;
 
 use \PHPUnit_Framework_TestCase as TestCase;
-use Namshi\JOSE\Signer\HS512;
+use Namshi\JOSE\Signer\OpenSSL\HS512;
 
 class HS512Test extends TestCase
 {

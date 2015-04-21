@@ -1,8 +1,9 @@
 <?php
 
-namespace Namshi\JOSE\Signer;
+namespace Namshi\JOSE\Signer\OpenSSL;
 
 use InvalidArgumentException;
+use Namshi\JOSE\Signer\SignerInterface;
 
 /**
  * Class responsible to sign inputs with the a public key algorithm, after hashing it.

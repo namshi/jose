@@ -1,9 +1,9 @@
 <?php
 
-namespace Namshi\JOSE\Test\Signer;
+namespace Namshi\JOSE\Test\OpenSSL\Signer;
 
+use Namshi\JOSE\Signer\OpenSSL\ES256;
 use \PHPUnit_Framework_TestCase as TestCase;
-use Namshi\JOSE\Signer\ES256;
 
 class ES256Test extends TestCase
 {

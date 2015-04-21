@@ -1,9 +1,9 @@
 <?php
 
-namespace Namshi\JOSE\Test\Signer;
+namespace Namshi\JOSE\Test\OpenSSL\Signer;
 
 use \PHPUnit_Framework_TestCase as TestCase;
-use Namshi\JOSE\Signer\RS256;
+use Namshi\JOSE\Signer\OpenSSL\RS256;
 
 class PublicKeyTest extends TestCase
 {

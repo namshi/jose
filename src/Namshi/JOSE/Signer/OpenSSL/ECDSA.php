@@ -1,6 +1,6 @@
 <?php
 
-namespace Namshi\JOSE\Signer;
+namespace Namshi\JOSE\Signer\OpenSSL;
 
 use \File_ASN1;
 

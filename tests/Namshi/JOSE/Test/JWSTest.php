@@ -220,4 +220,15 @@ class JWSTest extends TestCase
         $this->assertTrue($reversedHeader === $jws->getHeader());
     }
 
+    public function testSignAndVerifyWithSecLib()
+    {
+        $jwsRSA  = new JWS('RS256', null, 'SecLib');
+        $data = array('a' => 'b',);
+        $jwsRSA->setPayload($data);
+
+        $jwsRSA->sign(file_get_contents(SSL_KEYS_PATH . "private.key"), 'tests');
+        $jws = JWS::load($jwsRSA->getTokenString(), false, null, 'SecLib');
+
+        $this->assertTrue($jws->verify(file_get_contents(SSL_KEYS_PATH . "public.key", 'RS256')));
+    }
 }

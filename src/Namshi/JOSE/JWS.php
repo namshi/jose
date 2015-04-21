@@ -16,15 +16,22 @@ class JWS extends JWT
     protected $signature;
     protected $isSigned = false;
     protected $encodedSignature;
+    protected $encryptionEngine;
+    protected $supportedEncryptionEngines = array('OpenSSL', 'SecLib');
 
     /**
      * Constructor
      *
      * @param string $algorithm
      * @param string $type
+     * @param string $encryptionEngine
      */
-    public function __construct($algorithm, $type = null)
+    public function __construct($algorithm, $type = null, $encryptionEngine = "OpenSSL")
     {
+        if (!in_array($encryptionEngine, $this->supportedEncryptionEngines)) {
+            throw new InvalidArgumentException(sprintf("Encryption engine %s is not supported", $encryptionEngine));
+        }
+        $this->encryptionEngine = $encryptionEngine;
         parent::__construct(array(), array('alg' => $algorithm, 'typ' => $type ?: "JWS"));
     }
 
@@ -32,11 +39,12 @@ class JWS extends JWT
      * Signs the JWS signininput.
      *
      * @param  resource $key
+     * @param optional string $password
      * @return string
      */
-    public function sign($key)
+    public function sign($key, $password = null)
     {
-        $this->signature = $this->getSigner()->sign($this->generateSigninInput(), $key);
+        $this->signature = $this->getSigner()->sign($this->generateSigninInput(), $key, $password);
         $this->isSigned  = true;
 
         return $this->signature;
@@ -85,7 +93,7 @@ class JWS extends JWT
      * @return JWS
      * @throws \InvalidArgumentException
      */
-    public static function load($jwsTokenString, $allowUnsecure = false, Encoder $encoder = null)
+    public static function load($jwsTokenString, $allowUnsecure = false, Encoder $encoder = null, $encryptionEngine = 'OpenSSL')
     {
         if ($encoder === null) {
             $encoder = strpbrk($jwsTokenString, '+/=') ? new Base64Encoder() : new Base64UrlSafeEncoder();
@@ -102,7 +110,7 @@ class JWS extends JWT
                     throw new InvalidArgumentException(sprintf('The token "%s" cannot be validated in a secure context, as it uses the unallowed "none" algorithm', $jwsTokenString));
                 }
 
-                $jws = new self($header['alg'], isset($header['typ']) ? $header['typ'] : null);
+                $jws = new self($header['alg'], isset($header['typ']) ? $header['typ'] : null, $encryptionEngine);
                 
                 $jws->setEncoder($encoder)
                     ->setHeader($header)
@@ -181,13 +189,14 @@ class JWS extends JWT
      */
     protected function getSigner()
     {
-        $signerClass = sprintf("Namshi\\JOSE\\Signer\\%s", $this->header['alg']);
+        $signerClass = sprintf("Namshi\\JOSE\\Signer\\$this->encryptionEngine\\%s", $this->header['alg']);
 
         if (class_exists($signerClass)) {
             return new $signerClass();
         }
 
-        throw new InvalidArgumentException(sprintf("The algorithm '%s' is not supported", $this->header['alg']));
+        throw new InvalidArgumentException(
+            sprintf("The algorithm '%s' is not supported for %s", $this->header['alg'], $this->encryptionEngine));
     }
 
     /**
