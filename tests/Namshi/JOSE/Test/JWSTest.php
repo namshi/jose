@@ -15,10 +15,9 @@ class JWSTest extends TestCase
     {
         $date       = new DateTime('tomorrow');
         $data       = array(
-            'a'     => 'b',
-            'exp'   => $date->format('U')
+            'a' => 'b'
         );
-        $this->jws  = new JWS('RS256');
+        $this->jws  = new JWS(array('alg' => 'RS256'));
         $this->jws->setPayload($data);
     }
 
@@ -32,7 +31,7 @@ class JWSTest extends TestCase
             'a'     => 'b',
             'exp'   => $date->format('U')
         );
-        $this->jws  = new JWS('None');
+        $this->jws  = new JWS(array('alg' => 'None'));
         $this->jws->setPayload($data);
         $this->jws->sign('111');
 
@@ -50,7 +49,7 @@ class JWSTest extends TestCase
             'a'     => 'b',
             'exp'   => $date->format('U')
         );
-        $this->jws  = new JWS('None');
+        $this->jws  = new JWS(array('alg' => 'None'));
         $this->jws->setPayload($data);
         $this->jws->sign('111');
 
@@ -63,12 +62,11 @@ class JWSTest extends TestCase
 
     public function testRestrictingTheAlgorithmsKo()
     {
-        $this->jws  = new JWS('HS256');
+        $this->jws  = new JWS(array('alg' => 'HS256'));
         $this->jws->sign('12345');
 
         $jws        = JWS::load($this->jws->getTokenString());
         $this->assertFalse($jws->verify('12345', 'RS256'));
-        $this->assertFalse($jws->isValid('12345', 'RS256'));
     }
 
     public function testRestrictingTheAlgorithmsOk()
@@ -78,13 +76,12 @@ class JWSTest extends TestCase
             'a'     => 'b',
             'exp'   => $date->format('U')
         );
-        $this->jws  = new JWS('HS256');
+        $this->jws  = new JWS(array('alg' => 'HS256'));
         $this->jws->setPayload($data);
         $this->jws->sign('123');
 
         $jws        = JWS::load($this->jws->getTokenString());
         $this->assertTrue($jws->verify('123', 'HS256'));
-        $this->assertTrue($jws->isValid('123', 'HS256'));
     }
 
     public function testVerificationRS256()
@@ -100,16 +97,6 @@ class JWSTest extends TestCase
         $this->assertEquals('b', $payload['a']);
     }
 
-    public function testValidationOfAValidJWS()
-    {
-        $privateKey = openssl_pkey_get_private(SSL_KEYS_PATH . "private.key", self::SSL_KEY_PASSPHRASE);
-        $this->jws->sign($privateKey);
-
-        $jws        = JWS::load($this->jws->getTokenString());
-        $public_key = openssl_pkey_get_public(SSL_KEYS_PATH . "public.key");
-        $this->assertTrue($jws->isValid($public_key));
-    }
-
     public function testUseOfCustomEncoder()
     {
         $encoder = $this->prophesize('Namshi\JOSE\Base64\Encoder');
@@ -122,20 +109,6 @@ class JWSTest extends TestCase
             ->willReturn('{"alg": "test"}')
             ->shouldBeCalled();
         JWS::load($this->jws->getTokenString(), false, $encoder->reveal());
-    }
-
-    public function testValidationOfInvalidJWS()
-    {
-        $date       = new DateTime('yesterday');
-        $this->jws->setPayload(array(
-            'exp' => $date->format('U')
-        ));
-        $privateKey = openssl_pkey_get_private(SSL_KEYS_PATH . "private.key", self::SSL_KEY_PASSPHRASE);
-        $this->jws->sign($privateKey);
-
-        $jws        = JWS::load($this->jws->getTokenString());
-        $public_key = openssl_pkey_get_public(SSL_KEYS_PATH . "public.key");
-        $this->assertFalse($jws->isValid($public_key));
     }
 
     public function testVerificationThatTheJWSIsSigned()
@@ -182,7 +155,7 @@ class JWSTest extends TestCase
     public function testSignAndVerifyWithFalsePublicKey()
     {
         $public_key = false;
-        $jwsHMAC    = new JWS('HS256');
+        $jwsHMAC    = new JWS(array('alg' => 'HS256'));
 
         $jwsHMAC->sign(false);
         $jws = JWS::load($jwsHMAC->getTokenString());
@@ -194,7 +167,7 @@ class JWSTest extends TestCase
     public function testSignAndVerifyWithEmptyStringPublicKey()
     {
         $public_key = false;
-        $jwsHMAC    = new JWS('HS256');
+        $jwsHMAC    = new JWS(array('alg' => 'HS256'));
 
         $jwsHMAC->sign('');
         $jws = JWS::load($jwsHMAC->getTokenString());
@@ -207,6 +180,8 @@ class JWSTest extends TestCase
     {
         $privateKey = openssl_pkey_get_private(SSL_KEYS_PATH . "private.key", self::SSL_KEY_PASSPHRASE);
         $public_key = openssl_pkey_get_public(SSL_KEYS_PATH . "public.key");
+
+        $this->jws = new JWS(array('alg' => 'RS256', 'custom' => '1'));
 
         $header = $this->jws->getHeader();
         $reversedHeader = array_reverse($header);
@@ -222,7 +197,7 @@ class JWSTest extends TestCase
 
     public function testSignAndVerifyWithSecLib()
     {
-        $jwsRSA  = new JWS('RS256', null, 'SecLib');
+        $jwsRSA  = new JWS(array('alg' => 'RS256'), 'SecLib');
         $data = array('a' => 'b',);
         $jwsRSA->setPayload($data);
 
@@ -230,5 +205,30 @@ class JWSTest extends TestCase
         $jws = JWS::load($jwsRSA->getTokenString(), false, null, 'SecLib');
 
         $this->assertTrue($jws->verify(file_get_contents(SSL_KEYS_PATH . "public.key", 'RS256')));
+    }
+
+    public function testConstructionFromHeader()
+    {
+        $header = array('alg' => 'RS256', 'test' => true);
+        $jws = new JWS($header);
+
+        $this->assertTrue($header == $jws->getHeader());
+    }
+
+    public function testVerificationCustomizedHeader()
+    {
+        $header = $this->jws->getHeader();
+        $header['test'] = true;
+        $this->jws->setHeader($header);
+
+        $privateKey = openssl_pkey_get_private(SSL_KEYS_PATH . "private.key", self::SSL_KEY_PASSPHRASE);
+        $this->jws->sign($privateKey);
+
+        $jws           = JWS::load($this->jws->getTokenString());
+        $public_key    = openssl_pkey_get_public(SSL_KEYS_PATH . "public.key");
+        $headerFromSig = $jws->getHeader();
+
+        $this->assertSame($headerFromSig['test'], true);
+        $this->assertTrue($jws->verify($public_key));
     }
 }

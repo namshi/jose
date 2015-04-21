@@ -17,4 +17,19 @@ class JWTTest extends TestCase
 
         $this->assertEquals(sprintf("%s.%s", $encoder->encode(json_encode($header)), $encoder->encode(json_encode($payload))), $jwt->generateSigninInput());
     }
+
+    public function testPayload()
+    {
+        $jwt = new JWT(array('a' => 'b'), array());
+        $payload = $jwt->getPayload();
+
+        $this->assertSame(array('a' => 'b'), $payload);
+
+        $jwt = new JWT(array('a' => 'b'), array());
+        $jwt->setPayload(array('b' => 'a'));
+        $payload = $jwt->getPayload();
+
+        $this->assertSame($payload['b'], 'a');
+        $this->assertSame(array('b' => 'a'), $payload);
+    }
 }

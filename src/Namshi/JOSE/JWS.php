@@ -9,7 +9,7 @@ use Namshi\JOSE\Signer\SignerInterface;
 use Namshi\JOSE\Base64\Encoder;
 
 /**
- * Class representing a JSOn Web Signature.
+ * Class representing a JSON Web Signature.
  */
 class JWS extends JWT
 {
@@ -22,17 +22,21 @@ class JWS extends JWT
     /**
      * Constructor
      *
-     * @param string $algorithm
-     * @param string $type
+     * @param array $header An associative array of headers. The value can be any type accepted by json_encode or a JSON serializable object
+     * @see http://php.net/manual/en/function.json-encode.php
+     * @see http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @see https://tools.ietf.org/html/draft-ietf-jose-json-web-signature-41#section-4
      * @param string $encryptionEngine
+     * }
      */
-    public function __construct($algorithm, $type = null, $encryptionEngine = "OpenSSL")
+    public function __construct($header = array(), $encryptionEngine = "OpenSSL")
     {
         if (!in_array($encryptionEngine, $this->supportedEncryptionEngines)) {
             throw new InvalidArgumentException(sprintf("Encryption engine %s is not supported", $encryptionEngine));
         }
         $this->encryptionEngine = $encryptionEngine;
-        parent::__construct(array(), array('alg' => $algorithm, 'typ' => $type ?: "JWS"));
+
+        parent::__construct(array(), $header);
     }
 
     /**
@@ -110,8 +114,8 @@ class JWS extends JWT
                     throw new InvalidArgumentException(sprintf('The token "%s" cannot be validated in a secure context, as it uses the unallowed "none" algorithm', $jwsTokenString));
                 }
 
-                $jws = new self($header['alg'], isset($header['typ']) ? $header['typ'] : null, $encryptionEngine);
-                
+                $jws = new static($header, $encryptionEngine);
+
                 $jws->setEncoder($encoder)
                     ->setHeader($header)
                     ->setPayload($payload)
@@ -142,20 +146,6 @@ class JWS extends JWT
         $signinInput      = $this->generateSigninInput();
 
         return $this->getSigner()->verify($key, $decodedSignature, $signinInput);
-    }
-
-    /**
-     * Checks that the JWS has been signed with a valid private key by verifying it with a public $key
-     * and the token is not expired.
-     *
-     * @param resource|string $key
-     * @param string $algo The algorithms this JWS should be signed with. Use it if you want to restrict which algorithms you want to allow to be validated.
-     * 
-     * @return bool
-     */
-    public function isValid($key, $algo = null)
-    {
-        return $this->verify($key, $algo) && ! $this->isExpired();
     }
 
     /**
@@ -197,23 +187,5 @@ class JWS extends JWT
 
         throw new InvalidArgumentException(
             sprintf("The algorithm '%s' is not supported for %s", $this->header['alg'], $this->encryptionEngine));
-    }
-
-    /**
-     * Checks whether the token is expired.
-     *
-     * @return bool
-     */
-    protected function isExpired()
-    {
-        $payload = $this->getPayload();
-
-        if (isset($payload['exp']) && is_numeric($payload['exp'])) {
-            $now = new \DateTime('now');
-
-            return ($now->format('U') - $payload['exp']) > 0;
-        }
-
-        return false;
     }
 }

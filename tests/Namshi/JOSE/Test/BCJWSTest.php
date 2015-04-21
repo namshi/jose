@@ -23,7 +23,7 @@ class BCJWSTest extends TestCase
         );
 
         foreach ($data as $payload) {
-            $jwsOld = new JWS("RS256");
+            $jwsOld = new JWS(array("alg" => "RS256"));
             $jwsOld->setEncoder(new Base64Encoder());
             $jwsOld->setPayload($payload);
             $jwsOld->sign(openssl_pkey_get_private(SSL_KEYS_PATH . "private.key", self::SSL_KEY_PASSPHRASE));
