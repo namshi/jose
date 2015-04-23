@@ -162,6 +162,16 @@ The library provides a base JWT Class that implements what is needed just for JS
 the JWT class and adds the implementation for signing and verifying using JSON Web Signatures. The EasyJWS class extends
 the base JWS class and adds validation of a TTL and inclusion of automatic claims.
 
+## Major Versions
+
+### 2.x.x to 3.x.x
+
+Introduced the ability to specify an encryption engine. Added support of PHPSecLib to the existing OpenSSL implementation.
+
+### 3.x.x to 4.x.x
+
+Added the ability to set custom properties in the header. Moved automatic inclusion of certain claims into an EasyJWS class from the base JWS class.
+
 ## Credits
 
 This library has been inspired by the
