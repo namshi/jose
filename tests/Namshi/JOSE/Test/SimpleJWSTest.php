@@ -3,10 +3,10 @@
 namespace Namshi\JOSE\Test;
 
 use PHPUnit_Framework_TestCase as TestCase;
-use Namshi\JOSE\EasyJWS;
+use Namshi\JOSE\SimpleJWS;
 use DateTime;
 
-class EasyJWSTest extends TestCase
+class SimpleJWSTest extends TestCase
 {
     const SSL_KEY_PASSPHRASE = 'tests';
 
@@ -17,7 +17,7 @@ class EasyJWSTest extends TestCase
             'a'     => 'b',
             'exp'   => $date->format('U')
         );
-        $this->jws  = new EasyJWS(array('alg' => 'RS256'));
+        $this->jws  = new SimpleJWS(array('alg' => 'RS256'));
         $this->jws->setPayload($data);
     }
 
@@ -27,17 +27,17 @@ class EasyJWSTest extends TestCase
         $this->assertRegExp('/^\d+$/', $this->jws->getPayload()['iat'], 'iat property has integer value (from construction)');
     }
 
-    public function testValidationOfAValidEasyJWS()
+    public function testValidationOfAValidSimpleJWS()
     {
         $privateKey = openssl_pkey_get_private(SSL_KEYS_PATH . "private.key", self::SSL_KEY_PASSPHRASE);
         $this->jws->sign($privateKey);
 
-        $jws        = EasyJWS::load($this->jws->getTokenString());
+        $jws        = SimpleJWS::load($this->jws->getTokenString());
         $public_key = openssl_pkey_get_public(SSL_KEYS_PATH . "public.key");
         $this->assertTrue($jws->isValid($public_key, 'RS256'));
     }
 
-    public function testValidationOfInvalidEasyJWS()
+    public function testValidationOfInvalidSimpleJWS()
     {
         $date       = new DateTime('yesterday');
         $this->jws->setPayload(array(
@@ -46,7 +46,7 @@ class EasyJWSTest extends TestCase
         $privateKey = openssl_pkey_get_private(SSL_KEYS_PATH . "private.key", self::SSL_KEY_PASSPHRASE);
         $this->jws->sign($privateKey);
 
-        $jws        = EasyJWS::load($this->jws->getTokenString());
+        $jws        = SimpleJWS::load($this->jws->getTokenString());
         $public_key = openssl_pkey_get_public(SSL_KEYS_PATH . "public.key");
         $this->assertFalse($jws->isValid($public_key, 'RS256'));
     }

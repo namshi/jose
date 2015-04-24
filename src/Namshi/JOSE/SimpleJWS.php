@@ -5,7 +5,7 @@ namespace Namshi\JOSE;
 /**
  * Class providing an easy to use JWS implementation.
  */
-class EasyJWS extends JWS
+class SimpleJWS extends JWS
 {
     /**
      * Constructor

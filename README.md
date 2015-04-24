@@ -43,12 +43,12 @@ First, generate the JWS:
 ``` php
 <?php
 
-use Namshi\JOSE\EasyJWS;
+use Namshi\JOSE\SimpleJWS;
 
 if ($username == 'correctUsername' && $pass == 'ok') {
 	$user = Db::loadUserByUsername($username);
 
-	$jws  = new EasyJWS(array(
+	$jws  = new SimpleJWS(array(
 		'alg' => 'RS256'
 	));
 	$jws->setPayload(array(
@@ -70,9 +70,9 @@ is a valid call:
 ``` php
 <?php
 
-use Namshi\JOSE\EasyJWS;
+use Namshi\JOSE\SimpleJWS;
 
-$jws        = EasyJWS::load($_COOKIE['identity']);
+$jws        = SimpleJWS::load($_COOKIE['identity']);
 $public_key = openssl_pkey_get_public("/path/to/public.key");
 
 // verify that the token is valid and had the same values
@@ -120,15 +120,15 @@ $jws = JWS::load($tokenString, false, $encoder, 'SecLib');
 
 ## Under the hood
 
-In order to [validate the JWS](https://github.com/namshi/jose/blob/master/src/Namshi/JOSE/EasyJWS.php#L43),
+In order to [validate the JWS](https://github.com/namshi/jose/blob/master/src/Namshi/JOSE/SimpleJWS.php#L43),
 the signature is first [verified](https://github.com/namshi/jose/blob/master/src/Namshi/JOSE/JWS.php#L113)
-with a public key and then we will check whether the [token is expired](https://github.com/namshi/jose/blob/master/src/Namshi/JOSE/EasyJWS.php#L55).
+with a public key and then we will check whether the [token is expired](https://github.com/namshi/jose/blob/master/src/Namshi/JOSE/SimpleJWS.php#L55).
 
 To give a JWS a TTL, just use the standard `exp` value in the payload:
 
 ``` php
 $date    	= new DateTime('tomorrow');
-$this->jws  = new EasyJWS(array('alg' => 'RS256'));
+$this->jws  = new SimpleJWS(array('alg' => 'RS256'));
 $this->jws->setPayload(array(
 	'exp' => $date->format('U'),
 ));
@@ -159,7 +159,7 @@ Likewise, `JWS::load()` accepts such an implementation as a second argument.
 ## Implementation Specifics
 
 The library provides a base JWT Class that implements what is needed just for JSON Web Tokens. The JWS Class then extends
-the JWT class and adds the implementation for signing and verifying using JSON Web Signatures. The EasyJWS class extends
+the JWT class and adds the implementation for signing and verifying using JSON Web Signatures. The SimpleJWS class extends
 the base JWS class and adds validation of a TTL and inclusion of automatic claims.
 
 ## Major Versions
@@ -170,7 +170,7 @@ Introduced the ability to specify an encryption engine. Added support of PHPSecL
 
 ### 3.x.x to 4.x.x - Not Backwards Compatible
 
-Added the ability to set custom properties in the header. Moved automatic inclusion of certain claims into an EasyJWS class from the base JWS class.
+Added the ability to set custom properties in the header. Moved automatic inclusion of certain claims into an SimpleJWS class from the base JWS class.
 
 ## Credits
 
