@@ -34,9 +34,9 @@ class JWT
      */
     public function __construct(array $payload, array $header)
     {
-        $this->payload = $payload;
-        $this->header  = $header;
-        $this->encoder = new Base64UrlSafeEncoder();
+        $this->setPayload($payload);
+        $this->setHeader($header);
+        $this->setEncoder(new Base64UrlSafeEncoder());
     }
 
     /**
@@ -80,11 +80,6 @@ class JWT
     public function setPayload(array $payload)
     {
         $this->payload = $payload;
-
-        if (!isset($this->payload['iat'])) {
-            $now                  = new \DateTime('now');
-            $this->payload['iat'] = $now->format('U');
-        }
 
         return $this;
     }

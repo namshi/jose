@@ -10,11 +10,26 @@ class JWTTest extends TestCase
 {
     public function testGenerationOfTheSigninInput()
     {
-        $payload = array('a' => 'b');
+        $payload = array('b' => 'a', 'iat' => 1421161177);
         $header = array('a' => 'b');
         $jwt = new JWT($payload, $header);
         $encoder = new Base64UrlSafeEncoder();
 
-        $this->assertEquals(sprintf("%s.%s", $encoder->encode(json_encode($payload)), $encoder->encode(json_encode($header))), $jwt->generateSigninInput());
+        $this->assertEquals(sprintf("%s.%s", $encoder->encode(json_encode($header)), $encoder->encode(json_encode($payload))), $jwt->generateSigninInput());
+    }
+
+    public function testPayload()
+    {
+        $jwt = new JWT(array('a' => 'b'), array());
+        $payload = $jwt->getPayload();
+
+        $this->assertSame(array('a' => 'b'), $payload);
+
+        $jwt = new JWT(array('a' => 'b'), array());
+        $jwt->setPayload(array('b' => 'a'));
+        $payload = $jwt->getPayload();
+
+        $this->assertSame($payload['b'], 'a');
+        $this->assertSame(array('b' => 'a'), $payload);
     }
 }

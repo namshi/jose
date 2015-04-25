@@ -13,7 +13,7 @@ implementation of the JWS
 
 This library needs PHP 5.4+ and the library OpenSSL.
 
-It has been tested using `PHP5.3` to `PHP5.6` and `HHVM`.
+It has been tested using `PHP5.4` to `PHP5.6` and `HHVM`.
 
 
 ## Installation
@@ -22,7 +22,7 @@ You can install the library directly from
 composer / [packagist](https://packagist.org/packages/namshi/jose):
 
 ```
-"namshi/jose": "2.1.*"
+"namshi/jose": "4.0.*"
 ```
 
 ## Usage
@@ -43,12 +43,14 @@ First, generate the JWS:
 ``` php
 <?php
 
-use Namshi\JOSE\JWS;
+use Namshi\JOSE\SimpleJWS;
 
 if ($username == 'correctUsername' && $pass == 'ok') {
 	$user = Db::loadUserByUsername($username);
 
-	$jws  = new JWS('RS256');
+	$jws  = new SimpleJWS(array(
+		'alg' => 'RS256'
+	));
 	$jws->setPayload(array(
 		'uid' => $user->getid(),
 	));
@@ -68,9 +70,9 @@ is a valid call:
 ``` php
 <?php
 
-use Namshi\JOSE\JWS;
+use Namshi\JOSE\SimpleJWS;
 
-$jws        = JWS::load($_COOKIE['identity']);
+$jws        = SimpleJWS::load($_COOKIE['identity']);
 $public_key = openssl_pkey_get_public("/path/to/public.key");
 
 // verify that the token is valid and had the same values
@@ -98,12 +100,12 @@ In these cases, simply add the optional `'SecLib'` parameter when
 constructing a JWS:
 
 ```php
-$jws = new JWS('RS256', 'JWS', 'SecLib');
+$jws = new JWS(array('alg' => 'RS256'), 'SecLib');
 ```
 
-You can now use the PHPSecLib implmentaiton of RSA signing.  If you use 
+You can now use the PHPSecLib implementation of RSA signing.  If you use
 a password protected private key, you can still submit the private key 
-to use for signing as a string, as long as if you pass the password as the 
+to use for signing as a string, as long as you pass the password as the
 second parameter into the `sign` method:
 
 ```php
@@ -118,15 +120,15 @@ $jws = JWS::load($tokenString, false, $encoder, 'SecLib');
 
 ## Under the hood
 
-In order to [validate the JWS](https://github.com/namshi/jose/blob/master/src/Namshi/JOSE/JWS.php#L126),
-the signature is first [verified](https://github.com/namshi/jose/blob/master/src/Namshi/JOSE/JWS.php#L110)
-with a public key and then we will check whether the [token is expired](https://github.com/namshi/jose/blob/master/src/Namshi/JOSE/JWS.php#L172).
+In order to [validate the JWS](https://github.com/namshi/jose/blob/master/src/Namshi/JOSE/SimpleJWS.php#L43),
+the signature is first [verified](https://github.com/namshi/jose/blob/master/src/Namshi/JOSE/JWS.php#L113)
+with a public key and then we will check whether the [token is expired](https://github.com/namshi/jose/blob/master/src/Namshi/JOSE/SimpleJWS.php#L55).
 
 To give a JWS a TTL, just use the standard `exp` value in the payload:
 
 ``` php
 $date    	= new DateTime('tomorrow');
-$this->jws  = new JWS('RS256');
+$this->jws  = new SimpleJWS(array('alg' => 'RS256'));
 $this->jws->setPayload(array(
 	'exp' => $date->format('U'),
 ));
@@ -153,6 +155,22 @@ vulnerability. More info [here](http://tech.namshi.com/blog/2015/02/19/update-yo
 If, for some reason, you need to encode the token in a different way, you can
 inject any implementation of `Namshi\JOSE\Base64\Encoder` in a `JWS` instance.
 Likewise, `JWS::load()` accepts such an implementation as a second argument.
+
+## Implementation Specifics
+
+The library provides a base JWT Class that implements what is needed just for JSON Web Tokens. The JWS Class then extends
+the JWT class and adds the implementation for signing and verifying using JSON Web Signatures. The SimpleJWS class extends
+the base JWS class and adds validation of a TTL and inclusion of automatic claims.
+
+## Major Versions
+
+### 2.x.x to 3.x.x
+
+Introduced the ability to specify an encryption engine. Added support of PHPSecLib to the existing OpenSSL implementation.
+
+### 3.x.x to 4.x.x - Not Backwards Compatible
+
+Added the ability to set custom properties in the header. Moved automatic inclusion of certain claims into an SimpleJWS class from the base JWS class.
 
 ## Credits
 
