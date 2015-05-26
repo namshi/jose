@@ -13,7 +13,7 @@ abstract class HMAC implements SignerInterface
      */
     public function sign($input, $key)
     {
-        return hash_hmac($this->getHashingAlgorithm(), $input, $key);
+        return hash_hmac($this->getHashingAlgorithm(), $input, $key, true);
     }
 
     /**
@@ -50,11 +50,11 @@ abstract class HMAC implements SignerInterface
         $signatureLength   = strlen($signature);
         $signedInputLength = strlen($signedInput);
         $result            = 0;
-    
+
         if ($signedInputLength != $signatureLength) {
             return false;
         }
-    
+
         for ($i = 0; $i < $signedInputLength; $i++) {
             $result |= (ord($signature[$i]) ^ ord($signedInput[$i]));
         }

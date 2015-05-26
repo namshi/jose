@@ -12,7 +12,7 @@ class HS512Test extends TestCase
         $signer = new HS512;
         $signature = $signer->sign('aaa', 'foo');
 
-        $this->assertEquals($signature, '1b2b2a457f06a03e81093ac8e6c272d69b67f40eef6c396f14e9da0313bfb7e043f0a56b54051570733180cebc64dc6750d91bee4352ab7631902578a41bd38e');
+        $this->assertEquals($signature, base64_decode('GysqRX8GoD6BCTrI5sJy1ptn9A7vbDlvFOnaAxO/t+BD8KVrVAUVcHMxgM68ZNxnUNkb7kNSq3YxkCV4pBvTjg=='));
 
         $this->assertTrue($signer->verify('foo', $signature, 'aaa'));
         $this->assertFalse($signer->verify('bar', $signature, 'aaa'));
