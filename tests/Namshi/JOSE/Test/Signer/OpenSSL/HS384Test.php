@@ -12,7 +12,7 @@ class HS384Test extends TestCase
         $signer = new HS384;
         $signature = $signer->sign('aaa', 'foo');
 
-        $this->assertEquals($signature, '5ba09deea6649cd6085cec53ae9116145c1fb97d1eda3e7d8531f8915161e68fbdadc9df36da612e0e15f185df917185');
+        $this->assertEquals($signature, base64_decode('W6Cd7qZknNYIXOxTrpEWFFwfuX0e2j59hTH4kVFh5o+9rcnfNtphLg4V8YXfkXGF'));
 
         $this->assertTrue($signer->verify('foo', $signature, 'aaa'));
         $this->assertFalse($signer->verify('bar', $signature, 'aaa'));
