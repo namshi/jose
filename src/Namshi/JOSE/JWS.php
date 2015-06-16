@@ -110,7 +110,7 @@ class JWS extends JWT
             $payload = json_decode($encoder->decode($parts[1]), true);
 
             if (is_array($header) && is_array($payload)) {
-                if ($header['alg'] === 'None' && !$allowUnsecure) {
+                if (strtolower($header['alg']) === 'none' && !$allowUnsecure) {
                     throw new InvalidArgumentException(sprintf('The token "%s" cannot be validated in a secure context, as it uses the unallowed "none" algorithm', $jwsTokenString));
                 }
 
