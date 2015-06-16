@@ -25,7 +25,7 @@ class JWSTest extends TestCase
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testLoadingUnsecureJws()
+    public function testLoadingUnsecureJwsWithNoneAlgo()
     {
         $date       = new DateTime('tomorrow');
         $data       = array(
@@ -33,6 +33,27 @@ class JWSTest extends TestCase
             'exp'   => $date->format('U')
         );
         $this->jws  = new JWS('None');
+        $this->jws->setPayload($data);
+        $this->jws->sign('111');
+
+        $jws        = JWS::load($this->jws->getTokenString());
+        $this->assertFalse($jws->verify('111'));
+
+        $payload = $jws->getPayload();
+        $this->assertEquals('b', $payload['a']);
+    }
+    
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testLoadingUnsecureJwsWithLowercaseNone()
+    {
+        $date       = new DateTime('tomorrow');
+        $data       = array(
+            'a'     => 'b',
+            'exp'   => $date->format('U')
+        );
+        $this->jws  = new JWS(array('alg' => 'none'));
         $this->jws->setPayload($data);
         $this->jws->sign('111');
 
