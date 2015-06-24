@@ -179,7 +179,7 @@ class JWS extends JWT
      */
     protected function getSigner()
     {
-        $signerClass = sprintf("Namshi\\JOSE\\Signer\\$this->encryptionEngine\\%s", $this->header['alg']);
+        $signerClass = sprintf('Namshi\\JOSE\\Signer\\%s\\%s', $this->encryptionEngine, $this->header['alg']);
 
         if (class_exists($signerClass)) {
             return new $signerClass();
