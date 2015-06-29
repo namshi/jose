@@ -118,6 +118,19 @@ class JWSTest extends TestCase
         $this->assertEquals('b', $payload['a']);
     }
 
+    public function testVerificationRS256KeyAsString()
+    {
+        $privateKey = file_get_contents(TEST_DIR . "/private.key");//, self::SSL_KEY_PASSPHRASE);
+        $this->jws->sign($privateKey, self::SSL_KEY_PASSPHRASE);
+
+        $jws        = JWS::load($this->jws->getTokenString());
+        $public_key = openssl_pkey_get_public(SSL_KEYS_PATH . "public.key");
+        $this->assertTrue($jws->verify($public_key));
+
+        $payload = $jws->getPayload();
+        $this->assertEquals('b', $payload['a']);
+    }
+
     public function testUseOfCustomEncoder()
     {
         $encoder = $this->prophesize('Namshi\JOSE\Base64\Encoder');

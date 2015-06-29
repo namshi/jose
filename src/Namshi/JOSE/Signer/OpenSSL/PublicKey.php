@@ -14,14 +14,15 @@ abstract class PublicKey implements SignerInterface
     /**
      * @inheritdoc
      */
-    public function sign($input, $key)
+    public function sign($input, $key, $password = null)
     {
-        if (!$this->supportsKey($key)) {
+        $keyResource = $this->getKeyResource($key, $password);
+        if (!$this->supportsKey($keyResource)) {
             throw new InvalidArgumentException('Invalid key supplied.');
         }
 
         $signature = null;
-        openssl_sign($input, $signature, $key, $this->getHashingAlgorithm());
+        openssl_sign($input, $signature, $keyResource, $this->getHashingAlgorithm());
 
         return $signature;
     }
@@ -31,11 +32,26 @@ abstract class PublicKey implements SignerInterface
      */
     public function verify($key, $signature, $input)
     {
-        if (!$this->supportsKey($key)) {
+        $keyResource = $this->getKeyResource($key);
+        if (!$this->supportsKey($keyResource)) {
             throw new InvalidArgumentException('Invalid key supplied.');
         }
 
-        return (bool) openssl_verify($input, $signature, $key, $this->getHashingAlgorithm());
+        return (bool) openssl_verify($input, $signature, $keyResource, $this->getHashingAlgorithm());
+    }
+
+    /**
+     * Converts a string representation of a key into an OpenSSL resource
+     *
+     * @param string|resource $key
+     * @param string          $password
+     * @return resource OpenSSL key resource
+     */
+    protected function getKeyResource($key, $password = null) {
+        if (is_resource($key)) {
+            return $key;
+        }
+        return openssl_pkey_get_public($key) ? : openssl_pkey_get_private($key, $password);
     }
 
     /**
@@ -46,12 +62,6 @@ abstract class PublicKey implements SignerInterface
      */
     protected function supportsKey($key)
     {
-        if (!is_resource($key)) {
-            $key = openssl_pkey_get_public($key) ?: openssl_pkey_get_private($key);
-            if (!$key) {
-               return false;
-            }
-        }
         // OpenSSL 0.9.8+
         $keyDetails = openssl_pkey_get_details($key);
 
