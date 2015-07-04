@@ -20,7 +20,9 @@
     },
     "require": {
         "php": ">=5.3.3",
-        "lib-openssl": "*",
-        "phpseclib/phpseclib": "~0.3"
+        "lib-openssl": "*"
+    },
+    "suggest": {
+        "phpseclib/phpseclib": "Adds the option to Use phpseclib/phpseclib for RSA signing in case OpenSSL is not available"
     }
 }
