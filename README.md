@@ -116,6 +116,9 @@ You may also load a JWS using the PHPSecLib implementation of RSA verification:
 $jws = JWS::load($tokenString, false, $encoder, 'SecLib');
 ```
 
+The application using this library MUST then require 
+`"phpseclib/phpseclib": "~0.3.0"`.
+
 ## Under the hood
 
 In order to [validate the JWS](https://github.com/namshi/jose/blob/master/src/Namshi/JOSE/SimpleJWS.php#L43),
