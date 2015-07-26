@@ -19,8 +19,13 @@
         }
     },
     "require": {
-        "php": ">=5.3.3",
-        "lib-openssl": "*",
+        "ext-date": "*",
+        "ext-hash": "*",
+        "ext-json": "*",
+        "ext-openssl": "*",
+        "ext-pcre": "*",
+        "ext-spl": "*",
+        "php": ">=5.4.8",
         "phpseclib/phpseclib": "~0.3"
     }
 }
