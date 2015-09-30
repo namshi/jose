@@ -4,10 +4,12 @@ namespace Namshi\JOSE\Signer\SecLib;
 
 class RS512 extends RSA
 {
-    public function __construct()
+    /**
+     * {@inheritdoc}
+     */
+    protected function configureEncryptionAlgorithm(\Crypt_RSA $encryptionAlgorithm)
     {
-        parent::__construct();
-        $this->encryptionAlgorithm->setHash('sha512');
-        $this->encryptionAlgorithm->setMGFHash('sha512');
+        $encryptionAlgorithm->setHash('sha512');
+        $encryptionAlgorithm->setMGFHash('sha512');
     }
 }

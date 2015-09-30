@@ -4,10 +4,12 @@ namespace Namshi\JOSE\Signer\SecLib;
 
 class RS256 extends RSA
 {
-    public function __construct()
+    /**
+     * {@inheritdoc}
+     */
+    protected function configureEncryptionAlgorithm(\Crypt_RSA $encryptionAlgorithm)
     {
-        parent::__construct();
-        $this->encryptionAlgorithm->setHash('sha256');
-        $this->encryptionAlgorithm->setMGFHash('sha256');
+        $encryptionAlgorithm->setHash('sha256');
+        $encryptionAlgorithm->setMGFHash('sha256');
     }
 }
