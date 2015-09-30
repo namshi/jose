@@ -24,7 +24,7 @@ You can install the library directly from
 composer / [packagist](https://packagist.org/packages/namshi/jose):
 
 ```
-"namshi/jose": "5.0.*"
+"namshi/jose": "6.0.*"
 ```
 
 ## Usage
@@ -173,6 +173,12 @@ Introduced the ability to specify an encryption engine. Added support of PHPSecL
 ### 3.x.x to 4.x.x - Not Backwards Compatible
 
 Added the ability to set custom properties in the header. Moved automatic inclusion of certain claims into an SimpleJWS class from the base JWS class.
+
+### 6.x.x - Not Backwards Compatible
+
+- Dropped support for PHP 5.3
+- Don't escape slashes when generating signin input.
+  This may render tokens generated with earlier versions of Jose incompatible.
 
 ## Credits
 
