@@ -7,6 +7,9 @@ namespace Namshi\JOSE\Signer\OpenSSL;
  */
 class HS512 extends HMAC
 {
+    /**
+     * {@inheritdoc}
+     */
     public function getHashingAlgorithm()
     {
         return 'sha512';

@@ -7,11 +7,17 @@ namespace Namshi\JOSE\Signer\OpenSSL;
  */
 class ES256 extends ECDSA
 {
+    /**
+     * {@inheritdoc}
+     */
     public function getHashingAlgorithm()
     {
         return version_compare(phpversion(), '5.4.8', '<') ? 'SHA256' : OPENSSL_ALGO_SHA256;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getSupportedECDSACurve()
     {
         return '1.2.840.10045.3.1.7';

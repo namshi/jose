@@ -16,11 +16,12 @@ abstract class PublicKey implements SignerInterface
     public function sign($input, $key, $password = null)
     {
         $keyResource = $this->getKeyResource($key, $password);
+        $signature = null;
+
         if (!$this->supportsKey($keyResource)) {
             throw new InvalidArgumentException('Invalid key supplied.');
         }
 
-        $signature = null;
         openssl_sign($input, $signature, $keyResource, $this->getHashingAlgorithm());
 
         return $signature;
@@ -32,6 +33,7 @@ abstract class PublicKey implements SignerInterface
     public function verify($key, $signature, $input)
     {
         $keyResource = $this->getKeyResource($key);
+
         if (!$this->supportsKey($keyResource)) {
             throw new InvalidArgumentException('Invalid key supplied.');
         }

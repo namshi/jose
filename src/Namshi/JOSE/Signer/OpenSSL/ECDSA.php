@@ -27,6 +27,7 @@ abstract class ECDSA extends PublicKey
 
         if (isset($minVersions[PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION]) &&
             version_compare(PHP_VERSION, $minVersions[PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION], '<')) {
+
             return false;
         }
 
@@ -35,6 +36,7 @@ abstract class ECDSA extends PublicKey
         if (0 === preg_match('/-----BEGIN PUBLIC KEY-----([^-]+)-----END PUBLIC KEY-----/', $keyDetails['key'], $matches)) {
             return false;
         }
+
         $publicKey = trim($matches[1]);
         $asn1 = new File_ASN1();
 

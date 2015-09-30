@@ -22,20 +22,19 @@ class JWS extends JWT
     /**
      * Constructor.
      *
-     * @param array $header An associative array of headers. The value can be any type accepted by json_encode or a JSON serializable object
+     * @param array  $header           An associative array of headers. The value can be any type accepted by json_encode or a JSON serializable object
+     * @param string $encryptionEngine
      *
      * @see http://php.net/manual/en/function.json-encode.php
      * @see http://php.net/manual/en/jsonserializable.jsonserialize.php
      * @see https://tools.ietf.org/html/draft-ietf-jose-json-web-signature-41#section-4
-     *
-     * @param string $encryptionEngine
-     *                                 }
      */
     public function __construct($header = array(), $encryptionEngine = 'OpenSSL')
     {
         if (!in_array($encryptionEngine, $this->supportedEncryptionEngines)) {
             throw new InvalidArgumentException(sprintf('Encryption engine %s is not supported', $encryptionEngine));
         }
+
         $this->encryptionEngine = $encryptionEngine;
 
         parent::__construct(array(), $header);
@@ -44,8 +43,8 @@ class JWS extends JWT
     /**
      * Signs the JWS signininput.
      *
-     * @param resource        $key
-     * @param optional string $password
+     * @param resource    $key
+     * @param string|null $password
      *
      * @return string
      */
@@ -60,7 +59,7 @@ class JWS extends JWT
     /**
      * Returns the signature representation of the JWS.
      *
-     * @return string
+     * @return string|null
      */
     public function getSignature()
     {
@@ -68,7 +67,7 @@ class JWS extends JWT
             return $this->signature;
         }
 
-        return;
+        return null;
     }
 
     /**
@@ -138,7 +137,7 @@ class JWS extends JWT
      * signature previously stored (@see JWS::load).
      *
      * @param resource|string $key
-     * @param string          $algo The algorithms this JWS should be signed with. Use it if you want to restrict which algorithms you want to allow to be validated.
+     * @param string|null     $algo The algorithms this JWS should be signed with. Use it if you want to restrict which algorithms you want to allow to be validated.
      *
      * @return bool
      */
@@ -169,7 +168,7 @@ class JWS extends JWT
      *
      * @param string $encodedSignature
      *
-     * @return JWS
+     * @return self
      */
     public function setEncodedSignature($encodedSignature)
     {

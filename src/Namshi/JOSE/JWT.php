@@ -40,6 +40,8 @@ class JWT
 
     /**
      * @param Encoder $encoder
+     *
+     * @return self
      */
     public function setEncoder(Encoder $encoder)
     {
@@ -75,6 +77,8 @@ class JWT
      * Sets the payload of the current JWT.
      *
      * @param array $payload
+     *
+     * @return self
      */
     public function setPayload(array $payload)
     {
@@ -97,6 +101,8 @@ class JWT
      * Sets the header of this JWT.
      *
      * @param array $header
+     *
+     * @return self
      */
     public function setHeader(array $header)
     {
