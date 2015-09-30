@@ -15,7 +15,7 @@ class JWTTest extends TestCase
         $jwt = new JWT($payload, $header);
         $encoder = new Base64UrlSafeEncoder();
 
-        $this->assertEquals(sprintf("%s.%s", $encoder->encode(json_encode($header)), $encoder->encode(json_encode($payload))), $jwt->generateSigninInput());
+        $this->assertEquals(sprintf('%s.%s', $encoder->encode(json_encode($header)), $encoder->encode(json_encode($payload))), $jwt->generateSigninInput());
     }
 
     public function testGenerationOfTheSigninInputCanHandleSlashes()
@@ -25,7 +25,7 @@ class JWTTest extends TestCase
         $encoded_json_string = $encoder->encode($json_string);
         $jwt = new JWT(json_decode($json_string, true), json_decode($json_string, true));
 
-        $this->assertEquals(sprintf("%s.%s", $encoded_json_string, $encoded_json_string), $jwt->generateSigninInput());
+        $this->assertEquals(sprintf('%s.%s', $encoded_json_string, $encoded_json_string), $jwt->generateSigninInput());
     }
 
     public function testPayload()

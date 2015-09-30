@@ -3,20 +3,19 @@
 namespace Namshi\JOSE\Test\OpenSSL\Signer;
 
 use Namshi\JOSE\Signer\OpenSSL\ES256;
-use \PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit_Framework_TestCase as TestCase;
 
 class ES256Test extends TestCase
 {
-
     public function setup()
     {
         // https://github.com/sebastianbergmann/phpunit/issues/1356
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped();
         }
-        $this->privateKey = openssl_pkey_get_private(SSL_KEYS_PATH . "private.es256.key");
-        $this->public = openssl_pkey_get_public(SSL_KEYS_PATH . "public.es256.key");
-        $this->signer = new ES256;
+        $this->privateKey = openssl_pkey_get_private(SSL_KEYS_PATH.'private.es256.key');
+        $this->public = openssl_pkey_get_public(SSL_KEYS_PATH.'public.es256.key');
+        $this->signer = new ES256();
     }
 
     public function testVerificationWorksProperly()
@@ -32,7 +31,7 @@ class ES256Test extends TestCase
      */
     public function testWrongKeyCurve()
     {
-        $privateKey512 = openssl_pkey_get_private(SSL_KEYS_PATH . "private.es512.key");
+        $privateKey512 = openssl_pkey_get_private(SSL_KEYS_PATH.'private.es512.key');
         $this->signer->sign('aaa', $privateKey512);
     }
 
@@ -40,5 +39,4 @@ class ES256Test extends TestCase
     {
         $this->assertInternalType('string', $this->signer->sign('aaa', $this->privateKey));
     }
-
 }
