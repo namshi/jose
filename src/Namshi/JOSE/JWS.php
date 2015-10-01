@@ -20,20 +20,21 @@ class JWS extends JWT
     protected $supportedEncryptionEngines = array('OpenSSL', 'SecLib');
 
     /**
-     * Constructor
+     * Constructor.
      *
-     * @param array $header An associative array of headers. The value can be any type accepted by json_encode or a JSON serializable object
+     * @param array  $header           An associative array of headers. The value can be any type accepted by json_encode or a JSON serializable object
+     * @param string $encryptionEngine
+     *
      * @see http://php.net/manual/en/function.json-encode.php
      * @see http://php.net/manual/en/jsonserializable.jsonserialize.php
      * @see https://tools.ietf.org/html/draft-ietf-jose-json-web-signature-41#section-4
-     * @param string $encryptionEngine
-     * }
      */
-    public function __construct($header = array(), $encryptionEngine = "OpenSSL")
+    public function __construct($header = array(), $encryptionEngine = 'OpenSSL')
     {
         if (!in_array($encryptionEngine, $this->supportedEncryptionEngines)) {
-            throw new InvalidArgumentException(sprintf("Encryption engine %s is not supported", $encryptionEngine));
+            throw new InvalidArgumentException(sprintf('Encryption engine %s is not supported', $encryptionEngine));
         }
+
         $this->encryptionEngine = $encryptionEngine;
 
         parent::__construct(array(), $header);
@@ -42,14 +43,15 @@ class JWS extends JWT
     /**
      * Signs the JWS signininput.
      *
-     * @param  resource $key
-     * @param optional string $password
+     * @param resource    $key
+     * @param string|null $password
+     *
      * @return string
      */
     public function sign($key, $password = null)
     {
         $this->signature = $this->getSigner()->sign($this->generateSigninInput(), $key, $password);
-        $this->isSigned  = true;
+        $this->isSigned = true;
 
         return $this->signature;
     }
@@ -57,7 +59,7 @@ class JWS extends JWT
     /**
      * Returns the signature representation of the JWS.
      *
-     * @return string
+     * @return string|null
      */
     public function getSignature()
     {
@@ -87,14 +89,16 @@ class JWS extends JWT
     {
         $signinInput = $this->generateSigninInput();
 
-        return sprintf("%s.%s", $signinInput, $this->encoder->encode($this->getSignature()));
+        return sprintf('%s.%s', $signinInput, $this->encoder->encode($this->getSignature()));
     }
 
     /**
      * Creates an instance of a JWS from a JWT.
      *
      * @param string $jwsTokenString
+     *
      * @return JWS
+     *
      * @throws \InvalidArgumentException
      */
     public static function load($jwsTokenString, $allowUnsecure = false, Encoder $encoder = null, $encryptionEngine = 'OpenSSL')
@@ -102,11 +106,11 @@ class JWS extends JWT
         if ($encoder === null) {
             $encoder = strpbrk($jwsTokenString, '+/=') ? new Base64Encoder() : new Base64UrlSafeEncoder();
         }
-        
+
         $parts = explode('.', $jwsTokenString);
 
         if (count($parts) === 3) {
-            $header  = json_decode($encoder->decode($parts[0]), true);
+            $header = json_decode($encoder->decode($parts[0]), true);
             $payload = json_decode($encoder->decode($parts[1]), true);
 
             if (is_array($header) && is_array($payload)) {
@@ -133,7 +137,8 @@ class JWS extends JWT
      * signature previously stored (@see JWS::load).
      *
      * @param resource|string $key
-     * @param string $algo The algorithms this JWS should be signed with. Use it if you want to restrict which algorithms you want to allow to be validated.
+     * @param string|null     $algo The algorithms this JWS should be signed with. Use it if you want to restrict which algorithms you want to allow to be validated.
+     *
      * @return bool
      */
     public function verify($key, $algo = null)
@@ -143,7 +148,7 @@ class JWS extends JWT
         }
 
         $decodedSignature = $this->encoder->decode($this->getEncodedSignature());
-        $signinInput      = $this->generateSigninInput();
+        $signinInput = $this->generateSigninInput();
 
         return $this->getSigner()->verify($key, $decodedSignature, $signinInput);
     }
@@ -161,13 +166,14 @@ class JWS extends JWT
     /**
      * Sets the base64 encoded signature.
      *
-     * @param  string $encodedSignature
-     * @return JWS
+     * @param string $encodedSignature
+     *
+     * @return self
      */
     public function setEncodedSignature($encodedSignature)
     {
         $this->encodedSignature = $encodedSignature;
-        
+
         return $this;
     }
 
@@ -175,6 +181,7 @@ class JWS extends JWT
      * Returns the signer responsible to encrypting / decrypting this JWS.
      *
      * @return SignerInterface
+     *
      * @throws \InvalidArgumentException
      */
     protected function getSigner()

@@ -2,16 +2,15 @@
 
 namespace Namshi\JOSE\Signer\OpenSSL;
 
-use \File_ASN1;
+use File_ASN1;
 
 /**
  * Class responsible to sign inputs with the a ECDSA algorithm, after hashing it.
  */
 abstract class ECDSA extends PublicKey
 {
-
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function supportsKey($key)
     {
@@ -26,8 +25,9 @@ abstract class ECDSA extends PublicKey
             '5.6' => '5.6.0',
         );
 
-        if (isset($minVersions[PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION]) &&
-            version_compare(PHP_VERSION, $minVersions[PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION], '<')) {
+        if (isset($minVersions[PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION]) &&
+            version_compare(PHP_VERSION, $minVersions[PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION], '<')) {
+
             return false;
         }
 
@@ -36,10 +36,11 @@ abstract class ECDSA extends PublicKey
         if (0 === preg_match('/-----BEGIN PUBLIC KEY-----([^-]+)-----END PUBLIC KEY-----/', $keyDetails['key'], $matches)) {
             return false;
         }
+
         $publicKey = trim($matches[1]);
         $asn1 = new File_ASN1();
 
-        /**
+        /*
          * http://tools.ietf.org/html/rfc3279#section-2.2.3
          * AlgorithmIdentifier ::= SEQUENCE {
          *     algorithm OBJECT IDENTIFIER,
@@ -62,7 +63,7 @@ abstract class ECDSA extends PublicKey
             ),
         );
 
-        /**
+        /*
          * http://tools.ietf.org/html/rfc5280#section-4.1
          * SubjectPublicKeyInfo ::= SEQUENCE {
          *     algorithm AlgorithmIdentifier,
@@ -86,7 +87,7 @@ abstract class ECDSA extends PublicKey
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function getSupportedPrivateKeyType()
     {

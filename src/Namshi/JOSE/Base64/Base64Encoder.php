@@ -4,10 +4,8 @@ namespace Namshi\JOSE\Base64;
 
 class Base64Encoder implements Encoder
 {
-
     /**
-     * @param string $data
-     * @return string
+     * {@inheritdoc}
      */
     public function encode($data)
     {
@@ -15,12 +13,10 @@ class Base64Encoder implements Encoder
     }
 
     /**
-     * @param string $data
-     * @return string
+     * {@inheritdoc}
      */
     public function decode($data)
     {
         return base64_decode($data);
     }
-
 }
