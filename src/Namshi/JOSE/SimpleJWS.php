@@ -55,10 +55,10 @@ class SimpleJWS extends JWS
 
     /**
      * Checks whether the token is expired based on the 'exp' value.
-     *
+     *it
      * @return bool
      */
-    protected function isExpired()
+    public function isExpired()
     {
         $payload = $this->getPayload();
 
