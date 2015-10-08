@@ -26,6 +26,6 @@
         "ext-pcre": "*",
         "ext-spl": "*",
         "php": ">=5.4.8",
-        "phpseclib/phpseclib": "~0.3"
+        "phpseclib/phpseclib": "~2.0"
     }
 }
