@@ -28,12 +28,20 @@ class SimpleJWS extends JWS
      * Sets the payload of the current JWS with an issued at value in the 'iat' property.
      *
      * @param array $payload
+     * @return $this
      */
     public function setPayload(array $payload)
     {
         if (!isset($payload['iat'])) {
             $now            = new \DateTime('now');
-            $payload['iat'] = $now->format('U');
+
+            //cast iat as int, https://tools.ietf.org/html/draft-ietf-oauth-json-web-token-32#section-4.1.6
+            $payload['iat'] = (int) $now->format('U');
+        }
+
+        // ensure iat if set is an integer
+        if(array_key_exists('iat', $payload) && !is_int($payload['iat'])){
+            $payload['iat'] = (int) $payload['iat'];
         }
 
         return parent::setPayload($payload);
