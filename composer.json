@@ -15,7 +15,8 @@
     ],
     "autoload": {
         "psr-0": {
-            "Namshi\\JOSE":  "src/"
+            "Namshi\\JOSE":  "src/",
+            "Namshi\\JOSE\\Test":  "test/"
         }
     },
     "require": {
