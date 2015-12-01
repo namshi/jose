@@ -10,7 +10,6 @@ use Namshi\JOSE\Base64\Encoder;
  */
 class JWT
 {
-
     /**
      * @var array
      */
@@ -27,7 +26,7 @@ class JWT
     protected $encoder;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param array $payload
      * @param array $header
@@ -57,9 +56,9 @@ class JWT
     public function generateSigninInput()
     {
         $base64payload = $this->encoder->encode(json_encode($this->getPayload(), JSON_UNESCAPED_SLASHES));
-        $base64header  = $this->encoder->encode(json_encode($this->getHeader(), JSON_UNESCAPED_SLASHES));
+        $base64header = $this->encoder->encode(json_encode($this->getHeader(), JSON_UNESCAPED_SLASHES));
 
-        return sprintf("%s.%s", $base64header, $base64payload);
+        return sprintf('%s.%s', $base64header, $base64payload);
     }
 
     /**

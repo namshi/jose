@@ -16,7 +16,7 @@ class NoneTest extends TestCase
 
     public function testSigningWorksProperly()
     {
-        $signer    = new none();
+        $signer = new none();
         $signature = $signer->sign('aaa', 'foo');
 
         $this->assertTrue($signature === '');
