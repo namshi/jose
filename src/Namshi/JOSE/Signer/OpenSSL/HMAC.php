@@ -21,7 +21,6 @@ abstract class HMAC implements SignerInterface
      * in case of PHP < 5.6 a timing safe equals comparison function
      *
      * more info here:
-     *  http://blog.ircmaxell.com/2014/11/its-all-about-time.
      *  http://blog.ircmaxell.com/2014/11/its-all-about-time.html
      *
      *
@@ -32,10 +31,10 @@ abstract class HMAC implements SignerInterface
         $signedInput = $this->sign($input, $key);
 
         if (version_compare(PHP_VERSION, '5.6.0', '>=')) {
-            return hash_equals($signature, $signedInput);
+            return hash_equals($signedInput, $signature);
         }
 
-        return $this->timingSafeEquals($signature, $signedInput);
+        return $this->timingSafeEquals($signedInput, $signature);
     }
 
     /**
@@ -46,17 +45,18 @@ abstract class HMAC implements SignerInterface
      *
      * @return boolean true if the two strings are identical.
      */
-    public function timingSafeEquals($signature, $signedInput) {
-        $signatureLength   = strlen($signature);
-        $signedInputLength = strlen($signedInput);
-        $result            = 0;
+    public function timingSafeEquals($known, $input)
+    {
+        $knownLength = strlen($known);
+        $inputLength = strlen($input);
+        $result = 0;
 
-        if ($signedInputLength != $signatureLength) {
+        if ($knownLength !== $inputLength) {
             return false;
         }
 
-        for ($i = 0; $i < $signedInputLength; $i++) {
-            $result |= (ord($signature[$i]) ^ ord($signedInput[$i]));
+        for ($i = 0; $i < $inputLength; $i++) {
+            $result |= (ord($known[$i]) ^ ord($input[$i]));
         }
 
         return $result === 0;
