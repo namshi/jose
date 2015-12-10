@@ -37,6 +37,8 @@ class SimpleJWS extends JWS
             $payload['iat'] = $now->format('U');
         }
 
+        $payload['iat'] = (int) $payload['iat'];
+
         return parent::setPayload($payload);
     }
 
