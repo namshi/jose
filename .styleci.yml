@@ -1,0 +1,4 @@
+preset: symfony
+enabled:
+  - short_array_syntax
+  - ordered_use

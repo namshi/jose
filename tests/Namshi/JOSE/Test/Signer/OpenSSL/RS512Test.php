@@ -10,8 +10,8 @@ class RS512Test extends TestCase
     public function setup()
     {
         $this->privateKey = openssl_pkey_get_private(SSL_KEYS_PATH.'private.key', 'tests');
-        $this->public     = openssl_pkey_get_public(SSL_KEYS_PATH.'public.key');
-        $this->signer     = new RS512();
+        $this->public = openssl_pkey_get_public(SSL_KEYS_PATH.'public.key');
+        $this->signer = new RS512();
     }
 
     public function testVerificationWorksProperly()

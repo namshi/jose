@@ -15,8 +15,8 @@ class ES512Test extends SecLibTestCase
             $this->markTestSkipped();
         }
         $this->privateKey = openssl_pkey_get_private(SSL_KEYS_PATH.'private.es512.key');
-        $this->public     = openssl_pkey_get_public(SSL_KEYS_PATH.'public.es512.key');
-        $this->signer     = new ES512();
+        $this->public = openssl_pkey_get_public(SSL_KEYS_PATH.'public.es512.key');
+        $this->signer = new ES512();
     }
 
     public function testVerificationWorksProperly()

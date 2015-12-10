@@ -10,8 +10,8 @@ class RS256Test extends TestCase
     public function setup()
     {
         $this->privateKey = openssl_pkey_get_private(SSL_KEYS_PATH.'private.key', 'tests');
-        $this->public     = openssl_pkey_get_public(SSL_KEYS_PATH.'public.key');
-        $this->signer     = new RS256();
+        $this->public = openssl_pkey_get_public(SSL_KEYS_PATH.'public.key');
+        $this->signer = new RS256();
     }
 
     public function testVerificationWorksProperly()

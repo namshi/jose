@@ -16,14 +16,14 @@ class BCJWSTest extends TestCase
 
     public function testTestBC()
     {
-        $data = array(
-            array('order_nr' => 'ae123123'),
-            array('username' => 'asdasdasd'),
-            array('anything' => '!@#$%^&*()_+'),
-        );
+        $data = [
+            ['order_nr' => 'ae123123'],
+            ['username' => 'asdasdasd'],
+            ['anything' => '!@#$%^&*()_+'],
+        ];
 
         foreach ($data as $payload) {
-            $jwsOld = new JWS(array('alg' => 'RS256'));
+            $jwsOld = new JWS(['alg' => 'RS256']);
             $jwsOld->setEncoder(new Base64Encoder());
             $jwsOld->setPayload($payload);
             $jwsOld->sign(openssl_pkey_get_private(SSL_KEYS_PATH.'private.key', self::SSL_KEY_PASSPHRASE));

@@ -26,11 +26,11 @@ abstract class ECDSA extends PublicKey
         }
 
         // openssl_sign with EC keys was introduced in this PHP release
-        $minVersions = array(
+        $minVersions = [
             '5.4' => '5.4.26',
             '5.5' => '5.5.10',
             '5.6' => '5.6.0',
-        );
+        ];
 
         if (isset($minVersions[PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION]) &&
             version_compare(PHP_VERSION, $minVersions[PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION], '<')) {
@@ -43,7 +43,7 @@ abstract class ECDSA extends PublicKey
             return false;
         }
         $publicKey = trim($matches[1]);
-        $asn1      = new File_ASN1();
+        $asn1 = new File_ASN1();
 
         /*
          * http://tools.ietf.org/html/rfc3279#section-2.2.3
@@ -56,17 +56,17 @@ abstract class ECDSA extends PublicKey
          * parameters: id-ecSigType => 1.2.840.10045.x.y.z
          *
          */
-        $asnAlgorithmIdentifier = array(
-            'type'     => FILE_ASN1_TYPE_SEQUENCE,
-            'children' => array(
-                'ansi-X9-62' => array(
+        $asnAlgorithmIdentifier = [
+            'type' => FILE_ASN1_TYPE_SEQUENCE,
+            'children' => [
+                'ansi-X9-62' => [
                     'type' => FILE_ASN1_TYPE_OBJECT_IDENTIFIER,
-                ),
-                'id-ecSigType' => array(
+                ],
+                'id-ecSigType' => [
                     'type' => FILE_ASN1_TYPE_OBJECT_IDENTIFIER,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         /*
          * http://tools.ietf.org/html/rfc5280#section-4.1
@@ -75,17 +75,17 @@ abstract class ECDSA extends PublicKey
          *     subjectPublicKey BIT STRING
          * }
          */
-        $asnSubjectPublicKeyInfo = array(
-            'type'     => FILE_ASN1_TYPE_SEQUENCE,
-            'children' => array(
-                'algorithm'        => $asnAlgorithmIdentifier,
-                'subjectPublicKey' => array(
+        $asnSubjectPublicKeyInfo = [
+            'type' => FILE_ASN1_TYPE_SEQUENCE,
+            'children' => [
+                'algorithm' => $asnAlgorithmIdentifier,
+                'subjectPublicKey' => [
                     'type' => FILE_ASN1_TYPE_BIT_STRING,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
-        $decoded       = $asn1->decodeBER(base64_decode($publicKey));
+        $decoded = $asn1->decodeBER(base64_decode($publicKey));
         $mappedDetails = $asn1->asn1map($decoded[0], $asnSubjectPublicKeyInfo);
 
         return isset($mappedDetails['algorithm']['id-ecSigType']) ? $this->getSupportedECDSACurve() === $mappedDetails['algorithm']['id-ecSigType'] : false;

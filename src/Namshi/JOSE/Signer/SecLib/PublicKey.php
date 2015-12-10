@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Namshi\JOSE\Signer\SecLib;
-
 
 use InvalidArgumentException;
 use Namshi\JOSE\Signer\SignerInterface;
@@ -12,7 +10,7 @@ abstract class PublicKey implements SignerInterface
     protected $encryptionAlgorithm;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function sign($input, $key, $password = null)
     {
@@ -28,7 +26,7 @@ abstract class PublicKey implements SignerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function verify($key, $signature, $input)
     {
