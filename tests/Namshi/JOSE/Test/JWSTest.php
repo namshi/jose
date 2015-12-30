@@ -120,7 +120,7 @@ class JWSTest extends TestCase
 
     public function testVerificationRS256KeyAsString()
     {
-        $privateKey = file_get_contents(TEST_DIR.'/private.key');//, self::SSL_KEY_PASSPHRASE);
+        $privateKey = file_get_contents(TEST_DIR.'/private.key');
         $this->jws->sign($privateKey, self::SSL_KEY_PASSPHRASE);
 
         $jws        = JWS::load($this->jws->getTokenString());
