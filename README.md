@@ -1,7 +1,8 @@
 # NAMSHI | JOSE
 
-[![Build Status](https://travis-ci.org/namshi/jose.png?branch=master)](https://travis-ci.org/namshi/jose)
-[![HHVM Status](http://hhvm.h4cc.de/badge/namshi/jose.png)](http://hhvm.h4cc.de/package/namshi/jose)
+[![StyleCI](https://styleci.io/repos/10456191/shield?style=flat)](https://styleci.io/repos/10456191)
+[![Build Status](https://travis-ci.org/namshi/jose.svg)](https://travis-ci.org/namshi/jose)
+[![HHVM Status](http://hhvm.h4cc.de/badge/namshi/jose.svg)](http://hhvm.h4cc.de/package/namshi/jose)
 [![Latest Stable Version](https://poser.pugx.org/namshi/jose/v/stable)](https://packagist.org/packages/namshi/jose)
 [![Latest Unstable Version](https://poser.pugx.org/namshi/jose/v/unstable)](https://packagist.org/packages/namshi/jose)
 [![Total Downloads](https://poser.pugx.org/namshi/jose/downloads)](https://packagist.org/packages/namshi/jose)
@@ -92,11 +93,11 @@ if ($jws->isValid($public_key, 'RS256')) {
 
 ### PHPSECLIB For RSA Verification
 
-You may find that you need to use this library in an environment where 
-[PHP's wrappers for OpenSSL](http://php.net/manual/en/ref.openssl.php) 
+You may find that you need to use this library in an environment where
+[PHP's wrappers for OpenSSL](http://php.net/manual/en/ref.openssl.php)
 do not work, or OpenSSL simply is not installed.  This library uses
-OpenSSL to encrypt by default, but you can specify that you want to use [PHPSecLib](http://phpseclib.sourceforge.net/) for a pure PHP 
-implementation of RSA encryption.  
+OpenSSL to encrypt by default, but you can specify that you want to use [PHPSecLib](http://phpseclib.sourceforge.net/) for a pure PHP
+implementation of RSA encryption.
 
 In these cases, simply add the optional `'SecLib'` parameter when
 constructing a JWS:
@@ -106,7 +107,7 @@ $jws = new JWS(array('alg' => 'RS256'), 'SecLib');
 ```
 
 You can now use the PHPSecLib implementation of RSA signing.  If you use
-a password protected private key, you can still submit the private key 
+a password protected private key, you can still submit the private key
 to use for signing as a string, as long as you pass the password as the
 second parameter into the `sign` method:
 
