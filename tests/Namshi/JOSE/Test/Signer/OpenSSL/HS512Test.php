@@ -9,7 +9,7 @@ class HS512Test extends TestCase
 {
     public function testSigningAndVerificationWorkProperly()
     {
-        $signer    = new HS512();
+        $signer = new HS512();
         $signature = $signer->sign('aaa', 'foo');
 
         $this->assertEquals($signature, base64_decode('GysqRX8GoD6BCTrI5sJy1ptn9A7vbDlvFOnaAxO/t+BD8KVrVAUVcHMxgM68ZNxnUNkb7kNSq3YxkCV4pBvTjg=='));

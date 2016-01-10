@@ -3,17 +3,16 @@
 namespace Namshi\JOSE\Signer\OpenSSL;
 
 use InvalidArgumentException;
-use RuntimeException;
 use Namshi\JOSE\Signer\SignerInterface;
+use RuntimeException;
 
 /**
  * Class responsible to sign inputs with the a public key algorithm, after hashing it.
  */
 abstract class PublicKey implements SignerInterface
 {
-
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function sign($input, $key, $password = null)
     {
@@ -29,7 +28,7 @@ abstract class PublicKey implements SignerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function verify($key, $signature, $input)
     {
@@ -48,10 +47,11 @@ abstract class PublicKey implements SignerInterface
     }
 
     /**
-     * Converts a string representation of a key into an OpenSSL resource
+     * Converts a string representation of a key into an OpenSSL resource.
      *
      * @param string|resource $key
      * @param string          $password
+     *
      * @return resource OpenSSL key resource
      */
     protected function getKeyResource($key, $password = null)
@@ -59,14 +59,16 @@ abstract class PublicKey implements SignerInterface
         if (is_resource($key)) {
             return $key;
         }
-        return openssl_pkey_get_public($key) ? : openssl_pkey_get_private($key, $password);
+
+        return openssl_pkey_get_public($key) ?: openssl_pkey_get_private($key, $password);
     }
 
     /**
      * Check if the key is supported by this signer.
      *
-     * @param  resource $key Public or private key
-     * @return boolean
+     * @param resource $key Public or private key
+     *
+     * @return bool
      */
     protected function supportsKey($key)
     {

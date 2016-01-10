@@ -57,7 +57,7 @@ class JWS extends JWT
     public function sign($key, $password = null)
     {
         $this->signature = $this->getSigner()->sign($this->generateSigninInput(), $key, $password);
-        $this->isSigned  = true;
+        $this->isSigned = true;
 
         return $this->signature;
     }
@@ -116,7 +116,7 @@ class JWS extends JWT
         $parts = explode('.', $jwsTokenString);
 
         if (count($parts) === 3) {
-            $header  = json_decode($encoder->decode($parts[0]), true);
+            $header = json_decode($encoder->decode($parts[0]), true);
             $payload = json_decode($encoder->decode($parts[1]), true);
 
             if (is_array($header) && is_array($payload)) {
@@ -154,7 +154,7 @@ class JWS extends JWT
         }
 
         $decodedSignature = $this->encoder->decode($this->getEncodedSignature());
-        $signinInput      = $this->generateSigninInput();
+        $signinInput = $this->generateSigninInput();
 
         return $this->getSigner()->verify($key, $decodedSignature, $signinInput);
     }

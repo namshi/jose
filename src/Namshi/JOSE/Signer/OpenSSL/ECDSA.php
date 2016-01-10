@@ -43,7 +43,7 @@ abstract class ECDSA extends PublicKey
             return false;
         }
         $publicKey = trim($matches[1]);
-        $asn1      = new File_ASN1();
+        $asn1 = new File_ASN1();
 
         /*
          * http://tools.ietf.org/html/rfc3279#section-2.2.3
@@ -57,7 +57,7 @@ abstract class ECDSA extends PublicKey
          *
          */
         $asnAlgorithmIdentifier = array(
-            'type'     => FILE_ASN1_TYPE_SEQUENCE,
+            'type' => FILE_ASN1_TYPE_SEQUENCE,
             'children' => array(
                 'ansi-X9-62' => array(
                     'type' => FILE_ASN1_TYPE_OBJECT_IDENTIFIER,
@@ -76,16 +76,16 @@ abstract class ECDSA extends PublicKey
          * }
          */
         $asnSubjectPublicKeyInfo = array(
-            'type'     => FILE_ASN1_TYPE_SEQUENCE,
+            'type' => FILE_ASN1_TYPE_SEQUENCE,
             'children' => array(
-                'algorithm'        => $asnAlgorithmIdentifier,
+                'algorithm' => $asnAlgorithmIdentifier,
                 'subjectPublicKey' => array(
                     'type' => FILE_ASN1_TYPE_BIT_STRING,
                 ),
             ),
         );
 
-        $decoded       = $asn1->decodeBER(base64_decode($publicKey));
+        $decoded = $asn1->decodeBER(base64_decode($publicKey));
         $mappedDetails = $asn1->asn1map($decoded[0], $asnSubjectPublicKeyInfo);
 
         return isset($mappedDetails['algorithm']['id-ecSigType']) ? $this->getSupportedECDSACurve() === $mappedDetails['algorithm']['id-ecSigType'] : false;

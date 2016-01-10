@@ -14,7 +14,7 @@ class SimpleJWSTest extends TestCase
     {
         $date = new DateTime('tomorrow');
         $data = array(
-            'a'   => 'b',
+            'a' => 'b',
             'exp' => $date->format('U'),
         );
         $this->jws = new SimpleJWS(array('alg' => 'RS256'));
@@ -32,7 +32,7 @@ class SimpleJWSTest extends TestCase
         $privateKey = openssl_pkey_get_private(SSL_KEYS_PATH.'private.key', self::SSL_KEY_PASSPHRASE);
         $this->jws->sign($privateKey);
 
-        $jws        = SimpleJWS::load($this->jws->getTokenString());
+        $jws = SimpleJWS::load($this->jws->getTokenString());
         $public_key = openssl_pkey_get_public(SSL_KEYS_PATH.'public.key');
         $this->assertTrue($jws->isValid($public_key, 'RS256'));
     }
@@ -46,7 +46,7 @@ class SimpleJWSTest extends TestCase
         $privateKey = openssl_pkey_get_private(SSL_KEYS_PATH.'private.key', self::SSL_KEY_PASSPHRASE);
         $this->jws->sign($privateKey);
 
-        $jws        = SimpleJWS::load($this->jws->getTokenString());
+        $jws = SimpleJWS::load($this->jws->getTokenString());
         $public_key = openssl_pkey_get_public(SSL_KEYS_PATH.'public.key');
         $this->assertFalse($jws->isValid($public_key, 'RS256'));
     }

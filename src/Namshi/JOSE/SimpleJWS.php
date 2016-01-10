@@ -8,9 +8,10 @@ namespace Namshi\JOSE;
 class SimpleJWS extends JWS
 {
     /**
-     * Constructor
+     * Constructor.
      *
      * @param array $header An associative array of headers. The value can be any type accepted by json_encode or a JSON serializable object
+     *
      * @see http://php.net/manual/en/function.json-encode.php
      * @see http://php.net/manual/en/jsonserializable.jsonserialize.php
      * @see https://tools.ietf.org/html/draft-ietf-jose-json-web-signature-41#section-4
@@ -32,7 +33,7 @@ class SimpleJWS extends JWS
     public function setPayload(array $payload)
     {
         if (!isset($payload['iat'])) {
-            $now            = new \DateTime('now');
+            $now = new \DateTime('now');
             $payload['iat'] = $now->format('U');
         }
 
@@ -44,18 +45,19 @@ class SimpleJWS extends JWS
      * and the token is not expired.
      *
      * @param resource|string $key
-     * @param string $algo The algorithms this JWS should be signed with. Use it if you want to restrict which algorithms you want to allow to be validated.
+     * @param string          $algo The algorithms this JWS should be signed with. Use it if you want to restrict which algorithms you want to allow to be validated.
      *
      * @return bool
      */
     public function isValid($key, $algo = null)
     {
-        return $this->verify($key, $algo) && ! $this->isExpired();
+        return $this->verify($key, $algo) && !$this->isExpired();
     }
 
     /**
      * Checks whether the token is expired based on the 'exp' value.
-     *it
+     *it.
+     *
      * @return bool
      */
     public function isExpired()

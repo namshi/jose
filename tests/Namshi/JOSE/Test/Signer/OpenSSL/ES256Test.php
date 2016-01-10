@@ -15,8 +15,8 @@ class ES256Test extends SecLibTestCase
             $this->markTestSkipped();
         }
         $this->privateKey = openssl_pkey_get_private(SSL_KEYS_PATH.'private.es256.key');
-        $this->public     = openssl_pkey_get_public(SSL_KEYS_PATH.'public.es256.key');
-        $this->signer     = new ES256();
+        $this->public = openssl_pkey_get_public(SSL_KEYS_PATH.'public.es256.key');
+        $this->signer = new ES256();
     }
 
     public function testVerificationWorksProperly()
