@@ -2,7 +2,7 @@
 
 namespace Namshi\JOSE\Signer\OpenSSL;
 
-use File_ASN1;
+use phpseclib\File\ASN1;
 
 /**
  * Class responsible to sign inputs with the a ECDSA algorithm, after hashing it.
@@ -43,7 +43,7 @@ abstract class ECDSA extends PublicKey
             return false;
         }
         $publicKey = trim($matches[1]);
-        $asn1 = new File_ASN1();
+        $asn1 = new ASN1();
 
         /*
          * http://tools.ietf.org/html/rfc3279#section-2.2.3
@@ -57,13 +57,13 @@ abstract class ECDSA extends PublicKey
          *
          */
         $asnAlgorithmIdentifier = array(
-            'type' => FILE_ASN1_TYPE_SEQUENCE,
+            'type' => ASN1::TYPE_SEQUENCE,
             'children' => array(
                 'ansi-X9-62' => array(
-                    'type' => FILE_ASN1_TYPE_OBJECT_IDENTIFIER,
+                    'type' => ASN1::TYPE_OBJECT_IDENTIFIER,
                 ),
                 'id-ecSigType' => array(
-                    'type' => FILE_ASN1_TYPE_OBJECT_IDENTIFIER,
+                    'type' => ASN1::TYPE_OBJECT_IDENTIFIER,
                 ),
             ),
         );
@@ -76,11 +76,11 @@ abstract class ECDSA extends PublicKey
          * }
          */
         $asnSubjectPublicKeyInfo = array(
-            'type' => FILE_ASN1_TYPE_SEQUENCE,
+            'type' => ASN1::TYPE_SEQUENCE,
             'children' => array(
                 'algorithm' => $asnAlgorithmIdentifier,
                 'subjectPublicKey' => array(
-                    'type' => FILE_ASN1_TYPE_BIT_STRING,
+                    'type' => ASN1::TYPE_BIT_STRING,
                 ),
             ),
         );
