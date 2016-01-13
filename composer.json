@@ -23,7 +23,7 @@
         }
     },
     "autoload-dev": {
-        "psr-4: {
+        "psr-4": {
             "Namshi\\JOSE\\Test\\":  "test/Namshi/JOSE/Test/"
         }
     },
