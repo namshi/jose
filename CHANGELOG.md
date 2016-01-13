@@ -1,3 +1,8 @@
+### 6.0.5
+
+- Fixed missing second parameter to mb_strlen call in timingSafeEquals
+- Switch to non-deprecated autoloading PSR-4
+
 ### 6.0.4
 
 - Added styleci config, add styleci-php-cs bridge to check formatting

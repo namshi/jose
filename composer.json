@@ -14,9 +14,13 @@
         }
     ],
     "autoload": {
-        "psr-0": {
-            "Namshi\\JOSE":  "src/",
-            "Namshi\\JOSE\\Test":  "test/"
+        "psr-4": {
+            "Namshi\\JOSE\\":  "src/Namshi/JOSE/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Namshi\\JOSE\\Test\\":  "test/Namshi/JOSE/Test/"
         }
     },
     "require": {
