@@ -16,7 +16,7 @@ implementation of the JWS
 
 This library needs PHP 5.4+ and the library OpenSSL.
 
-It has been tested using `PHP5.4` to `PHP5.6` and `HHVM`.
+It has been tested using `PHP5.4` to `PHP7.0` and `HHVM`.
 
 
 ## Installation
