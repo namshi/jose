@@ -19,7 +19,11 @@
     ],
     "autoload": {
         "psr-0": {
-            "Namshi\\JOSE":  "src/",
+            "Namshi\\JOSE":  "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-0": {
             "Namshi\\JOSE\\Test":  "test/"
         }
     },
