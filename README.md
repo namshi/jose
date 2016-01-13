@@ -14,9 +14,9 @@ implementation of the JWS
 
 ## Prerequisites
 
-This library needs PHP 5.4+ and the library OpenSSL.
+This library needs PHP 5.5+ and the library OpenSSL.
 
-It has been tested using `PHP5.4` to `PHP7.0` and `HHVM`.
+It has been tested using `PHP5.5` to `PHP7.0` and `HHVM`.
 
 
 ## Installation
@@ -25,7 +25,7 @@ You can install the library directly from
 composer / [packagist](https://packagist.org/packages/namshi/jose):
 
 ```
-"namshi/jose": "6.0.*"
+"namshi/jose": "6.1.*"
 ```
 
 ## Usage
@@ -177,11 +177,14 @@ Added the ability to set custom properties in the header. Moved automatic inclus
 
 ### 6.x.x - Not Backwards Compatible
 
+#### 6.1.x
+- Dropped support for PHP 5.4
+- phpseclib 2.0
+
+#### 6.0.x
 - Dropped support for PHP 5.3
 - Don't escape slashes when generating signin input.
   This may render tokens generated with earlier versions of Jose incompatible.
-- **DON'T** install version 6.0.2! It's using phpseclib version 2 instead of version 1 and some classes are broken
-
 
 ## Credits
 

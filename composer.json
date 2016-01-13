@@ -11,6 +11,10 @@
         {
             "name": "Alessandro Nadalin",
             "email": "alessandro.nadalin@gmail.com"
+        },
+        {
+          "name": "Alessandro Cinelli (cirpo)",
+          "email": "alessandro.cinelli@gmail.com"
         }
     ],
     "autoload": {
@@ -26,7 +30,7 @@
         "ext-openssl": "*",
         "ext-pcre": "*",
         "ext-spl": "*",
-        "php": ">=5.4.8",
+        "php": ">=5.5",
         "phpseclib/phpseclib": "2.0.*"
     }
 }

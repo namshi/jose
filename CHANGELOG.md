@@ -1,3 +1,8 @@
+### 6.1.0
+
+- Dropped support for PHP 5.4
+- phpseclib ~2.0.x
+
 ### 6.0.4
 
 - Added styleci config, add styleci-php-cs bridge to check formatting
