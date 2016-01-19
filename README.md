@@ -2,9 +2,7 @@
 
 [![StyleCI](https://styleci.io/repos/10456191/shield?style=flat)](https://styleci.io/repos/10456191)
 [![Build Status](https://travis-ci.org/namshi/jose.svg)](https://travis-ci.org/namshi/jose)
-[![HHVM Status](http://hhvm.h4cc.de/badge/namshi/jose.svg)](http://hhvm.h4cc.de/package/namshi/jose)
 [![Latest Stable Version](https://poser.pugx.org/namshi/jose/v/stable)](https://packagist.org/packages/namshi/jose)
-[![Latest Unstable Version](https://poser.pugx.org/namshi/jose/v/unstable)](https://packagist.org/packages/namshi/jose)
 [![Total Downloads](https://poser.pugx.org/namshi/jose/downloads)](https://packagist.org/packages/namshi/jose)
 [![License](https://poser.pugx.org/namshi/jose/license)](https://packagist.org/packages/namshi/jose)
 
