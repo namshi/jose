@@ -53,7 +53,7 @@ abstract class HMAC implements SignerInterface
 
         if (\function_exists('mb_strlen')) {
             $knownLength = \mb_strlen($known, '8bit');
-            $inputLength = \mb_strlen($input);
+            $inputLength = \mb_strlen($input, '8bit');
         }
 
         $result = 0;
