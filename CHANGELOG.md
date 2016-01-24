@@ -1,7 +1,17 @@
+### 6.1.1
+
+- Fixed missing second parameter to mb_strlen call in timingSafeEquals
+- Switch to non-deprecated autoloading PSR-4
+
 ### 6.1.0
 
 - Dropped support for PHP 5.4
 - phpseclib ~2.0.x
+
+### 6.0.5
+
+- Fixed missing second parameter to mb_strlen call in timingSafeEquals
+- Switch to non-deprecated autoloading PSR-4
 
 ### 6.0.4
 
