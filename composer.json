@@ -35,6 +35,7 @@
         "ext-pcre": "*",
         "ext-spl": "*",
         "php": ">=5.5",
-        "phpseclib/phpseclib": "2.0.*"
+        "phpseclib/phpseclib": "^2.0",
+        "symfony/polyfill-php56": "^1.0"
     }
 }
