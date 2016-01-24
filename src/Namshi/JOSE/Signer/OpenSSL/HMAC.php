@@ -31,10 +31,6 @@ abstract class HMAC implements SignerInterface
     {
         $signedInput = $this->sign($input, $key);
 
-        if (version_compare(PHP_VERSION, '5.6.0', '>=')) {
-            return hash_equals($signedInput, $signature);
-        }
-
         return $this->timingSafeEquals($signedInput, $signature);
     }
 
@@ -48,25 +44,7 @@ abstract class HMAC implements SignerInterface
      */
     public function timingSafeEquals($known, $input)
     {
-        $knownLength = strlen($known);
-        $inputLength = strlen($input);
-
-        if (\function_exists('mb_strlen')) {
-            $knownLength = \mb_strlen($known, '8bit');
-            $inputLength = \mb_strlen($input, '8bit');
-        }
-
-        $result = 0;
-
-        if ($knownLength !== $inputLength) {
-            return false;
-        }
-
-        for ($i = 0; $i < $inputLength; ++$i) {
-            $result |= (ord($known[$i]) ^ ord($input[$i]));
-        }
-
-        return $result === 0;
+        return hash_equals($known, $input);
     }
 
     /**
