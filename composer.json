@@ -36,6 +36,6 @@
         "ext-spl": "*",
         "php": ">=5.5",
         "phpseclib/phpseclib": "^2.0",
-        "symfony/polyfill-mbstring": "^1.0"
+        "symfony/polyfill-php56": "^1.0"
     }
 }
