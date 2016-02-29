@@ -56,7 +56,7 @@ class JWS extends JWT
      */
     public function sign($key, $password = null)
     {
-        $this->signature = $this->getSigner()->sign($this->generateSigninInput(), $key, $password);
+        $this->signature = hex2bin($this->getSigner()->sign($this->generateSigninInput(), $key, $password));
         $this->isSigned = true;
 
         return $this->signature;
