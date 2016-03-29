@@ -31,11 +31,13 @@
         "ext-date": "*",
         "ext-hash": "*",
         "ext-json": "*",
-        "ext-openssl": "*",
         "ext-pcre": "*",
         "ext-spl": "*",
         "php": ">=5.5",
-        "phpseclib/phpseclib": "^2.0",
         "symfony/polyfill-php56": "^1.0"
+    },
+    "suggest": {
+        "ext-openssl": "Allows to use OpenSSL as crypto engine.",
+        "phpseclib/phpseclib": "Allows to use Phpseclib as crypto engine, use version ^2.0."
     }
 }
