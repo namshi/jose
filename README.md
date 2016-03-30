@@ -23,7 +23,7 @@ You can install the library directly from
 composer / [packagist](https://packagist.org/packages/namshi/jose):
 
 ```
-"namshi/jose": "6.1.*"
+"namshi/jose": "7.0.*"
 ```
 
 ## Usage
@@ -183,6 +183,12 @@ Added the ability to set custom properties in the header. Moved automatic inclus
 - Dropped support for PHP 5.3
 - Don't escape slashes when generating signin input.
   This may render tokens generated with earlier versions of Jose incompatible.
+
+### 7.x.x
+
+#### 7.0.x
+
+Moved phpseclib and the openssl extension as suggested dependencies.
 
 ## Credits
 
