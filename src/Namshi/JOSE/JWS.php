@@ -101,7 +101,10 @@ class JWS extends JWT
     /**
      * Creates an instance of a JWS from a JWT.
      *
-     * @param string $jwsTokenString
+     * @param string  $jwsTokenString
+     * @param bool    $allowUnsecure
+     * @param Encoder $encoder
+     * @param string  $encryptionEngine
      *
      * @return JWS
      *
