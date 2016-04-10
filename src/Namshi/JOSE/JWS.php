@@ -187,6 +187,24 @@ class JWS extends JWT
     }
 
     /**
+     * Checks whether the token is expired based on the 'exp' value.
+     *
+     * @return bool
+     */
+    public function isExpired()
+    {
+        $payload = $this->getPayload();
+
+        if (isset($payload['exp']) && is_numeric($payload['exp'])) {
+            $now = new \DateTime('now');
+
+            return ($now->format('U') - $payload['exp']) > 0;
+        }
+
+        return false;
+    }
+
+    /**
      * Returns the signer responsible to encrypting / decrypting this JWS.
      *
      * @return SignerInterface

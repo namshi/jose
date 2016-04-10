@@ -53,23 +53,4 @@ class SimpleJWS extends JWS
     {
         return $this->verify($key, $algo) && !$this->isExpired();
     }
-
-    /**
-     * Checks whether the token is expired based on the 'exp' value.
-     *it.
-     *
-     * @return bool
-     */
-    public function isExpired()
-    {
-        $payload = $this->getPayload();
-
-        if (isset($payload['exp']) && is_numeric($payload['exp'])) {
-            $now = new \DateTime('now');
-
-            return ($now->format('U') - $payload['exp']) > 0;
-        }
-
-        return false;
-    }
 }
