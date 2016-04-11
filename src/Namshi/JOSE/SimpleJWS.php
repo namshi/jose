@@ -17,12 +17,12 @@ class SimpleJWS extends JWS
      * @see https://tools.ietf.org/html/draft-ietf-jose-json-web-signature-41#section-4
      * }
      */
-    public function __construct($header = array())
+    public function __construct($header = array(), $encryptionEngine = 'OpenSSL')
     {
         if (!isset($header['typ'])) {
             $header['typ'] = 'JWS';
         }
-        parent::__construct($header);
+        parent::__construct($header, $encryptionEngine);
     }
 
     /**
