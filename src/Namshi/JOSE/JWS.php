@@ -49,7 +49,7 @@ class JWS extends JWT
     /**
      * Signs the JWS signininput.
      *
-     * @param resource        $key
+     * @param resource|string $key
      * @param optional string $password
      *
      * @return string
