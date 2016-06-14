@@ -81,7 +81,7 @@ $public_key = openssl_pkey_get_public("/path/to/public.key");
 if ($jws->isValid($public_key, 'RS256')) {
 	$payload = $jws->getPayload();
 
-	echo sprintf("Hey, my JS app just did an action authenticated as user #%s", $payload['id']);
+	echo sprintf("Hey, my JS app just did an action authenticated as user #%s", $payload['uid']);
 }
 ```
 
