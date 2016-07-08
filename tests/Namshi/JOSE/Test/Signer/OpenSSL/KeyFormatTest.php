@@ -15,6 +15,8 @@ class KeyFormatTest extends TestCase
         $this->publicKeyResource = openssl_pkey_get_public(SSL_KEYS_PATH.'public.key');
         $this->publicKeyString = "-----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDfdZEMQbms3t1oyAjY3kfxw/BN\n5A86fPfi4bZ97TIrIeMkMYTZegRJGm7kt6VI91gz+vgBYwVagNY937vFqru4USQz\nxzrNpAiCPi4SKr6kEy8f57zTlIVtg4pip9B7h55cCTg6tDBxSRKuUayR/phRrD/c\njBs+DMQNOBNkVW1CUQIDAQAB\n-----END PUBLIC KEY-----";
         $this->publicKeyFilePath = SSL_KEYS_PATH.'public-ne.key';
+        $this->badPrivateKeyString = "-----BEGIN PRIVATE KEY-----\nfoo\nbar\n-----END PRIVATE KEY-----";
+        $this->badPrivateKeyFilePath = SSL_KEYS_PATH.'nonexistant.key';
         $this->signer = new RS256();
     }
 
@@ -37,5 +39,17 @@ class KeyFormatTest extends TestCase
         $encrypted = $this->signer->sign('aaa', $this->privateKeyResource);
         $this->assertInternalType('bool', $this->signer->verify($this->publicKeyResource, $encrypted, 'aaa'));
         $this->assertTrue($this->signer->verify($this->publicKeyResource, $encrypted, 'aaa'));
+    }
+
+    public function testBadStringKeyThrowsException()
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->signer->sign('aaa', $this->badPrivateKeyString);
+    }
+
+    public function testFilePathKeyThrowsException()
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->signer->sign('aaa', $this->badPrivateKeyFilePath);
     }
 }
