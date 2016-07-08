@@ -41,12 +41,18 @@ class KeyFormatTest extends TestCase
         $this->assertTrue($this->signer->verify($this->publicKeyResource, $encrypted, 'aaa'));
     }
 
+    /**
+     * @requires PHP 5.6
+     */
     public function testBadStringKeyThrowsException()
     {
         $this->expectException(\RuntimeException::class);
         $this->signer->sign('aaa', $this->badPrivateKeyString);
     }
 
+    /**
+     * @requires PHP 5.6
+     */
     public function testFilePathKeyThrowsException()
     {
         $this->expectException(\RuntimeException::class);
