@@ -42,7 +42,7 @@ class KeyFormatTest extends TestCase
     }
 
     /**
-     * @requires PHP 5.6
+     * @requires PHPUnit 5.4
      */
     public function testBadStringKeyThrowsException()
     {
@@ -51,11 +51,17 @@ class KeyFormatTest extends TestCase
     }
 
     /**
-     * @requires PHP 5.6
+     * @requires PHPUnit 5.4
      */
     public function testFilePathKeyThrowsException()
     {
-        $this->expectException(\RuntimeException::class);
+        if(defined('HHVM_VERSION')) {
+            // in HHVM, openssl_pkey_get_(public|private) throws an error when
+            // passed a file path that cannot be found
+            $this->expectException('PHPUnit_Framework_Error');
+        } else {
+            $this->expectException(\RuntimeException::class);
+        }
         $this->signer->sign('aaa', $this->badPrivateKeyFilePath);
     }
 }
