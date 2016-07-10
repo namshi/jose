@@ -29,12 +29,13 @@ class SimpleJWS extends JWS
      * Sets the payload of the current JWS with an issued at value in the 'iat' property.
      *
      * @param array $payload
+     *
+     * @return $this
      */
     public function setPayload(array $payload)
     {
         if (!isset($payload['iat'])) {
-            $now = new \DateTime('now');
-            $payload['iat'] = $now->format('U');
+            $payload['iat'] = time();
         }
 
         return parent::setPayload($payload);
@@ -64,10 +65,16 @@ class SimpleJWS extends JWS
     {
         $payload = $this->getPayload();
 
-        if (isset($payload['exp']) && is_numeric($payload['exp'])) {
+        if (isset($payload['exp'])) {
             $now = new \DateTime('now');
 
-            return ($now->format('U') - $payload['exp']) > 0;
+            if (is_int($payload['exp'])) {
+                return ($now->getTimestamp() - $payload['exp']) > 0;
+            }
+
+            if (is_numeric($payload['exp'])) {
+                return ($now->format('U') - $payload['exp']) > 0;
+            }
         }
 
         return false;

@@ -190,6 +190,14 @@ Added the ability to set custom properties in the header. Moved automatic inclus
 
 Moved phpseclib and the openssl extension as suggested dependencies.
 
+## Tests
+
+Tests are written using PHPUnit for this library. After doing composer install you can execute the following command to run tests:
+
+```
+./vendor/bin/phpunit
+```
+
 ## Credits
 
 This library has been inspired by the
