@@ -1,6 +1,5 @@
 # NAMSHI | JOSE
 
-[![StyleCI](https://styleci.io/repos/10456191/shield?style=flat)](https://styleci.io/repos/10456191)
 [![Build Status](https://travis-ci.org/namshi/jose.svg)](https://travis-ci.org/namshi/jose)
 [![Latest Stable Version](https://poser.pugx.org/namshi/jose/v/stable)](https://packagist.org/packages/namshi/jose)
 [![Total Downloads](https://poser.pugx.org/namshi/jose/downloads)](https://packagist.org/packages/namshi/jose)
