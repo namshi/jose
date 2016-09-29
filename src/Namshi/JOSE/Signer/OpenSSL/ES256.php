@@ -16,4 +16,9 @@ class ES256 extends ECDSA
     {
         return '1.2.840.10045.3.1.7';
     }
+    
+    protected function getSignatureLength()
+    {
+        return 64;
+    }
 }

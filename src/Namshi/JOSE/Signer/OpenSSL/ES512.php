@@ -16,4 +16,9 @@ class ES512 extends ECDSA
     {
         return '1.3.132.0.35';
     }
+    
+    protected function getSignatureLength()
+    {
+        return 132;
+    }
 }
