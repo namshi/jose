@@ -49,7 +49,7 @@ abstract class PublicKey implements SignerInterface
             $asn1Decoded['s'] instanceof BigInteger                 ) {
 
             $signature = str_pad($asn1Decoded['r']->toBytes(), $partLength, '0', STR_PAD_LEFT).
-                         str_pad($asn1Decoded['s']->toBytes(), $partLength, '0', STR_PAD_LEFT)
+                         str_pad($asn1Decoded['s']->toBytes(), $partLength, '0', STR_PAD_LEFT);
         }else{
             throw new RuntimeException('No Signature generated');
         }
