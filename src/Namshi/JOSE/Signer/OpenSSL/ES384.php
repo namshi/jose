@@ -16,4 +16,9 @@ class ES384 extends ECDSA
     {
         return '1.3.132.0.34';
     }
+    
+    protected function getSignatureLength()
+    {
+        return 96;
+    }
 }

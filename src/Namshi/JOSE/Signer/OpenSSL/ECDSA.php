@@ -3,12 +3,25 @@
 namespace Namshi\JOSE\Signer\OpenSSL;
 
 use phpseclib\File\ASN1;
+use phpseclib\Math\BigInteger as BigInteger;
 
 /**
  * Class responsible to sign inputs with the a ECDSA algorithm, after hashing it.
  */
 abstract class ECDSA extends PublicKey
 {
+    private static $asn1Schema =    [
+                                        'type' => ASN1::TYPE_SEQUENCE,
+                                        'children' => [
+                                            'r' => [
+                                                'type' => ASN1::TYPE_INTEGER,
+                                            ],
+                                            's' => [
+                                                'type' => ASN1::TYPE_INTEGER,
+                                            ],
+                                        ],
+                                    ];
+
     public function __constuct()
     {
         if (version_compare(PHP_VERSION, '7.0.0-dev') >= 0) {
@@ -16,6 +29,49 @@ abstract class ECDSA extends PublicKey
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function sign($input, $key, $password = null)
+    {
+        $signature = parent::sign($input, $key, $password);
+
+        $partLength = $this->getSignatureLength()/2;
+
+        $asn1Decoder = new ASN1();
+
+        $asn1Decoded = $asn1Decoder->decodeBER($signature);
+        $asn1Decoded = $asn1Decoder->asn1map($asn1Decoded[0], self::$asn1Schema);
+        if( isset($asn1Decoded['r']) && isset($asn1Decoded['s']) &&
+            $asn1Decoded['r'] instanceof BigInteger              && 
+            $asn1Decoded['s'] instanceof BigInteger                 ) {
+
+            $signature = str_pad($asn1Decoded['r']->toBytes(), $partLength, chr(0), STR_PAD_LEFT).
+                         str_pad($asn1Decoded['s']->toBytes(), $partLength, chr(0), STR_PAD_LEFT);
+        }else{
+            throw new RuntimeException('No Signature generated');
+        }
+        return $signature;
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function verify($key, $signature, $input)    
+    {
+        if (strlen($signature) != $this->getSignatureLength()) {
+            return false;
+        }
+        $partLength = $this->getSignatureLength()/2;
+
+        $asn1Encoder = new ASN1();
+        $asn1Encoded = $asn1Encoder->encodeDER( [
+                                                    'r'=>new BigInteger(substr($signature,0,$partLength), 256),
+                                                    's'=>new BigInteger(substr($signature,$partLength,$partLength), 256)
+                                                ], self::$asn1Schema);
+        return parent::verify($key, $asn1Encoded, $input);
+    }
+    
     /**
      * {@inheritdoc}
      */

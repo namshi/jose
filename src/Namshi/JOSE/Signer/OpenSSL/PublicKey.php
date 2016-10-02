@@ -1,7 +1,6 @@
 <?php
 
 namespace Namshi\JOSE\Signer\OpenSSL;
-
 use InvalidArgumentException;
 use Namshi\JOSE\Signer\SignerInterface;
 use RuntimeException;
@@ -14,16 +13,15 @@ abstract class PublicKey implements SignerInterface
     /**
      * {@inheritdoc}
      */
+     
     public function sign($input, $key, $password = null)
     {
         $keyResource = $this->getKeyResource($key, $password);
         if (!$this->supportsKey($keyResource)) {
             throw new InvalidArgumentException('Invalid key supplied.');
         }
-
         $signature = null;
         openssl_sign($input, $signature, $keyResource, $this->getHashingAlgorithm());
-
         return $signature;
     }
 
@@ -36,15 +34,13 @@ abstract class PublicKey implements SignerInterface
         if (!$this->supportsKey($keyResource)) {
             throw new InvalidArgumentException('Invalid key supplied.');
         }
-
         $result = openssl_verify($input, $signature, $keyResource, $this->getHashingAlgorithm());
-
         if ($result === -1) {
             throw new RuntimeException('Unknown error during verification.');
         }
-
         return (bool) $result;
     }
+
 
     /**
      * Converts a string representation of a key into an OpenSSL resource.
