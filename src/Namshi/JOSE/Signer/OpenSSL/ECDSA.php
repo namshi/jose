@@ -46,8 +46,8 @@ abstract class ECDSA extends PublicKey
             $asn1Decoded['r'] instanceof BigInteger              && 
             $asn1Decoded['s'] instanceof BigInteger                 ) {
 
-            $signature = str_pad($asn1Decoded['r']->toBytes(), $partLength, '0', STR_PAD_LEFT).
-                         str_pad($asn1Decoded['s']->toBytes(), $partLength, '0', STR_PAD_LEFT);
+            $signature = str_pad($asn1Decoded['r']->toBytes(), $partLength, chr(0), STR_PAD_LEFT).
+                         str_pad($asn1Decoded['s']->toBytes(), $partLength, chr(0), STR_PAD_LEFT);
         }else{
             throw new RuntimeException('No Signature generated');
         }
@@ -63,6 +63,7 @@ abstract class ECDSA extends PublicKey
             return false;
         }
         $partLength = $this->getSignatureLength()/2;
+
         $asn1Encoder = new ASN1();
         $asn1Encoded = $asn1Encoder->encodeDER( [
                                                     'r'=>new BigInteger(substr($signature,0,$partLength), 256),
