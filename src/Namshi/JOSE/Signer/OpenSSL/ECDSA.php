@@ -9,7 +9,7 @@ use phpseclib\File\ASN1;
  */
 abstract class ECDSA extends PublicKey
 {
-    public function __constuct()
+    public function __construct()
     {
         if (version_compare(PHP_VERSION, '7.0.0-dev') >= 0) {
             throw new \InvalidArgumentException("phpseclib 1.0.0(LTS), even the latest 2.0.0, doesn't support PHP7 yet");
