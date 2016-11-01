@@ -15,6 +15,7 @@ class JWS extends JWT
 {
     protected $signature;
     protected $isSigned = false;
+    protected $originalToken;
     protected $encodedSignature;
     protected $encryptionEngine;
     protected $supportedEncryptionEngines = array('OpenSSL', 'SecLib');
@@ -132,6 +133,7 @@ class JWS extends JWT
                 $jws->setEncoder($encoder)
                     ->setHeader($header)
                     ->setPayload($payload)
+                    ->setOriginalToken($jwsTokenString)
                     ->setEncodedSignature($parts[2]);
 
                 return $jws;
@@ -157,9 +159,40 @@ class JWS extends JWT
         }
 
         $decodedSignature = $this->encoder->decode($this->getEncodedSignature());
-        $signinInput = $this->generateSigninInput();
+        $signinInput = $this->getSigninInput();
 
         return $this->getSigner()->verify($key, $decodedSignature, $signinInput);
+    }
+
+    /**
+     * Get the original token signin input if it exists, otherwise generate the
+     * signin input for the current JWS
+     *
+     * @return string
+     */
+    private function getSigninInput()
+    {
+        $parts = explode('.', $this->originalToken);
+
+        if (count($parts) >= 2) {
+            return sprintf('%s.%s', $parts[0], $parts[1]);
+        }
+
+        return $this->generateSigninInput();
+    }
+
+    /**
+     * Sets the original base64 encoded token.
+     *
+     * @param string $originalToken
+     *
+     * @return JWS
+     */
+    private function setOriginalToken($originalToken)
+    {
+        $this->originalToken = $originalToken;
+
+        return $this;
     }
 
     /**
