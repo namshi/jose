@@ -6,6 +6,8 @@ use DateTime;
 use Namshi\JOSE\JWS;
 use PHPUnit_Framework_TestCase as TestCase;
 use Prophecy\Argument;
+use Namshi\JOSE\Signer\OpenSSL\HS256;
+use Namshi\JOSE\Base64\Base64UrlSafeEncoder;
 
 class JWSTest extends TestCase
 {
@@ -266,5 +268,27 @@ class JWSTest extends TestCase
 
         $this->assertSame($headerFromSig['test'], true);
         $this->assertTrue($jws->verify($public_key));
+    }
+
+    public function testVerificationWithJsonThatContainsWhitespace()
+    {
+        $header = '{
+            "alg": "HS256"
+        }';
+
+        $payload = '{
+            "a": "b"
+        }';
+
+        $encoder = new Base64UrlSafeEncoder();
+        $signer = new HS256();
+
+        $token = sprintf('%s.%s', $encoder->encode($header), $encoder->encode($payload));
+        $signature = $encoder->encode($signer->sign($token, '123'));
+        $jwsToken = sprintf('%s.%s', $token, $signature);
+
+        $jws = JWS::load($jwsToken);
+
+        $this->assertTrue($jws->verify('123'));
     }
 }
