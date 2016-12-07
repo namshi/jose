@@ -25,21 +25,6 @@ class SimpleJWS extends JWS
     }
 
     /**
-     * Sets the payload of the current JWS with an issued at value in the 'iat' property.
-     *
-     * @param array $payload
-     */
-    public function setPayload(array $payload)
-    {
-        if (!isset($payload['iat'])) {
-            $now            = new \DateTime('now');
-            $payload['iat'] = $now->format('U');
-        }
-
-        return parent::setPayload($payload);
-    }
-
-    /**
      * Checks that the JWS has been signed with a valid private key by verifying it with a public $key
      * and the token is not expired.
      *
