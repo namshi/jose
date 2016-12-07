@@ -1,9 +1,7 @@
 # NAMSHI | JOSE
 
-[![Build Status](https://travis-ci.org/namshi/jose.png?branch=master)](https://travis-ci.org/namshi/jose)
-[![HHVM Status](http://hhvm.h4cc.de/badge/namshi/jose.png)](http://hhvm.h4cc.de/package/namshi/jose)
+[![Build Status](https://travis-ci.org/namshi/jose.svg)](https://travis-ci.org/namshi/jose)
 [![Latest Stable Version](https://poser.pugx.org/namshi/jose/v/stable)](https://packagist.org/packages/namshi/jose)
-[![Latest Unstable Version](https://poser.pugx.org/namshi/jose/v/unstable)](https://packagist.org/packages/namshi/jose)
 [![Total Downloads](https://poser.pugx.org/namshi/jose/downloads)](https://packagist.org/packages/namshi/jose)
 [![License](https://poser.pugx.org/namshi/jose/license)](https://packagist.org/packages/namshi/jose)
 
@@ -13,9 +11,9 @@ implementation of the JWS
 
 ## Prerequisites
 
-This library needs PHP 5.4+ and the library OpenSSL.
+This library needs PHP 5.5+ and the library OpenSSL.
 
-It has been tested using `PHP5.4` to `PHP5.6` and `HHVM`.
+It has been tested using `PHP5.5` to `PHP7.0` and `HHVM`.
 
 
 ## Installation
@@ -24,7 +22,7 @@ You can install the library directly from
 composer / [packagist](https://packagist.org/packages/namshi/jose):
 
 ```
-"namshi/jose": "6.0.*"
+"namshi/jose": "7.0.*"
 ```
 
 ## Usage
@@ -82,7 +80,7 @@ $public_key = openssl_pkey_get_public("/path/to/public.key");
 if ($jws->isValid($public_key, 'RS256')) {
 	$payload = $jws->getPayload();
 
-	echo sprintf("Hey, my JS app just did an action authenticated as user #%s", $payload['id']);
+	echo sprintf("Hey, my JS app just did an action authenticated as user #%s", $payload['uid']);
 }
 ```
 
@@ -92,11 +90,11 @@ if ($jws->isValid($public_key, 'RS256')) {
 
 ### PHPSECLIB For RSA Verification
 
-You may find that you need to use this library in an environment where 
-[PHP's wrappers for OpenSSL](http://php.net/manual/en/ref.openssl.php) 
+You may find that you need to use this library in an environment where
+[PHP's wrappers for OpenSSL](http://php.net/manual/en/ref.openssl.php)
 do not work, or OpenSSL simply is not installed.  This library uses
-OpenSSL to encrypt by default, but you can specify that you want to use [PHPSecLib](http://phpseclib.sourceforge.net/) for a pure PHP 
-implementation of RSA encryption.  
+OpenSSL to encrypt by default, but you can specify that you want to use [PHPSecLib](http://phpseclib.sourceforge.net/) for a pure PHP
+implementation of RSA encryption.
 
 In these cases, simply add the optional `'SecLib'` parameter when
 constructing a JWS:
@@ -106,7 +104,7 @@ $jws = new JWS(array('alg' => 'RS256'), 'SecLib');
 ```
 
 You can now use the PHPSecLib implementation of RSA signing.  If you use
-a password protected private key, you can still submit the private key 
+a password protected private key, you can still submit the private key
 to use for signing as a string, as long as you pass the password as the
 second parameter into the `sign` method:
 
@@ -176,9 +174,28 @@ Added the ability to set custom properties in the header. Moved automatic inclus
 
 ### 6.x.x - Not Backwards Compatible
 
+#### 6.1.x
+- Dropped support for PHP 5.4
+- phpseclib 2.0
+
+#### 6.0.x
 - Dropped support for PHP 5.3
 - Don't escape slashes when generating signin input.
   This may render tokens generated with earlier versions of Jose incompatible.
+
+### 7.x.x
+
+#### 7.0.x
+
+Moved phpseclib and the openssl extension as suggested dependencies.
+
+## Tests
+
+Tests are written using PHPUnit for this library. After doing composer install you can execute the following command to run tests:
+
+```
+./vendor/bin/phpunit
+```
 
 ## Credits
 

@@ -2,16 +2,16 @@
 
 namespace Namshi\JOSE\Test\OpenSSL\Signer;
 
-use \PHPUnit_Framework_TestCase as TestCase;
 use Namshi\JOSE\Signer\OpenSSL\RS384;
+use PHPUnit_Framework_TestCase as TestCase;
 
 class RS384Test extends TestCase
 {
     public function setup()
     {
-        $this->privateKey   = openssl_pkey_get_private(SSL_KEYS_PATH . "private.key", 'tests');
-        $this->public       = openssl_pkey_get_public(SSL_KEYS_PATH . "public.key");
-        $this->signer       = new RS384;
+        $this->privateKey = openssl_pkey_get_private(SSL_KEYS_PATH.'private.key', 'tests');
+        $this->public = openssl_pkey_get_public(SSL_KEYS_PATH.'public.key');
+        $this->signer = new RS384();
     }
 
     public function testVerificationWorksProperly()

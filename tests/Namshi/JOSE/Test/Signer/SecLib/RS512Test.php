@@ -1,18 +1,19 @@
 <?php
 
-
-namespace Namshi\JOSE\Test\SecLib\Signer;
+namespace Namshi\JOSE\Test\Signer\SecLib;
 
 use Namshi\JOSE\Signer\SecLib\RS512;
-use \PHPUnit_Framework_TestCase as TestCase;
 
-class RS512Test extends TestCase {
+class RS512Test extends SecLibTestCase
+{
     public function setup()
     {
-        $this->privateKey   = file_get_contents(SSL_KEYS_PATH . "private.key");
-        $this->public       = file_get_contents(SSL_KEYS_PATH . "public.key");
-        $this->password     = 'tests';
-        $this->signer       = new RS512();
+        parent::setup();
+
+        $this->privateKey = file_get_contents(SSL_KEYS_PATH.'private.key');
+        $this->public = file_get_contents(SSL_KEYS_PATH.'public.key');
+        $this->password = 'tests';
+        $this->signer = new RS512();
     }
 
     public function testVerificationWorksProperly()

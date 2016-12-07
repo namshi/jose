@@ -1,31 +1,44 @@
 {
     "name": "namshi/jose",
     "description": "JSON Object Signing and Encryption library for PHP.",
-    "require-dev": {
-        "phpunit/phpunit": "~4.5",
-        "satooshi/php-coveralls": "dev-master"
-    },
     "license": "MIT",
     "keywords": ["jws", "jwt", "json", "json web token", "json web signature", "token"],
     "authors": [
         {
             "name": "Alessandro Nadalin",
             "email": "alessandro.nadalin@gmail.com"
+        },
+        {
+          "name": "Alessandro Cinelli (cirpo)",
+          "email": "alessandro.cinelli@gmail.com"
         }
     ],
     "autoload": {
-        "psr-0": {
-            "Namshi\\JOSE":  "src/"
+        "psr-4": {
+            "Namshi\\JOSE\\":  "src/Namshi/JOSE/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Namshi\\JOSE\\Test\\":  "test/Namshi/JOSE/Test/"
         }
     },
     "require": {
         "ext-date": "*",
         "ext-hash": "*",
         "ext-json": "*",
-        "ext-openssl": "*",
         "ext-pcre": "*",
         "ext-spl": "*",
-        "php": ">=5.4.8",
-        "phpseclib/phpseclib": "~0.3"
+        "php": ">=5.5",
+        "symfony/polyfill-php56": "^1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.5|^5.0",
+        "satooshi/php-coveralls": "^1.0",
+        "phpseclib/phpseclib": "^2.0"
+    },
+    "suggest": {
+        "ext-openssl": "Allows to use OpenSSL as crypto engine.",
+        "phpseclib/phpseclib": "Allows to use Phpseclib as crypto engine, use version ^2.0."
     }
 }

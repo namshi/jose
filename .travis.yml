@@ -1,24 +1,17 @@
 language: php
 
 php:
-    - 5.4
     - 5.5
     - 5.6
+    - 7.0
     - hhvm
 
-before_script:
-    - curl -s http://getcomposer.org/installer | php
-    - php composer.phar install --dev --no-interaction
+sudo: false
 
-phpunit: php vendor/bin/phpunit --prefer-dist --dev
+install: travis_retry composer install --no-interaction --prefer-source
 
-script:
-    - mkdir -p build/logs
-    - php vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover ./build/logs/clover.xml
+before_script: mkdir -p build/logs
 
-after_script:
-    - php vendor/bin/coveralls -v
+script: php vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover ./build/logs/clover.xml
 
-matrix:
-  allow_failures:
-    - php: hhvm
+after_success: php vendor/bin/coveralls -v
