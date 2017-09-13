@@ -2,7 +2,7 @@
 
 namespace Namshi\JOSE\Test;
 
-use Namshi\JOSE\Base64\Base64Encoder;
+use Namshi\JOSE\Encoder\Base64Encoder;
 use Namshi\JOSE\JWS;
 use PHPUnit_Framework_TestCase as TestCase;
 

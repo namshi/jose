@@ -1,6 +1,6 @@
 <?php
 
-namespace Namshi\JOSE\Base64;
+namespace Namshi\JOSE\Encoder;
 
 interface Encoder
 {
