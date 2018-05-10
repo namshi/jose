@@ -7,7 +7,7 @@ use Namshi\JOSE\JWS;
 use PHPUnit_Framework_TestCase as TestCase;
 use Prophecy\Argument;
 use Namshi\JOSE\Signer\OpenSSL\HS256;
-use Namshi\JOSE\Base64\Base64UrlSafeEncoder;
+use Namshi\JOSE\Encoder\Base64UrlSafeEncoder;
 
 class JWSTest extends TestCase
 {
@@ -135,7 +135,7 @@ class JWSTest extends TestCase
 
     public function testUseOfCustomEncoder()
     {
-        $encoder = $this->prophesize('Namshi\JOSE\Base64\Encoder');
+        $encoder = $this->prophesize('Namshi\JOSE\Encoder\Encoder');
         $encoder
             ->decode(Argument::any())
             ->willReturn('{"whatever": "the payload should be"}')

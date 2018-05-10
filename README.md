@@ -166,8 +166,13 @@ vulnerability. More info [here](http://tech.namshi.com/blog/2015/02/19/update-yo
 ## Using a custom encoder
 
 If, for some reason, you need to encode the token in a different way, you can
-inject any implementation of `Namshi\JOSE\Base64\Encoder` in a `JWS` instance.
+inject any implementation of `Namshi\JOSE\Encoder\Encoder` in a `JWS` instance.
 Likewise, `JWS::load()` accepts such an implementation as a second argument.
+
+### Using a custom json encoder
+The token is a base64 encoded json. If you want to control how the json is
+encoded, you can inject a custom json encoder using: `JWS::setJsonEncoder()`
+which takes an instance of `Namshi\JOSE\Encoder\Encoder`.
 
 ## Implementation Specifics
 

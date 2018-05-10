@@ -2,8 +2,9 @@
 
 namespace Namshi\JOSE;
 
-use Namshi\JOSE\Base64\Base64UrlSafeEncoder;
-use Namshi\JOSE\Base64\Encoder;
+use Namshi\JOSE\Encoder\Base64UrlSafeEncoder;
+use Namshi\JOSE\Encoder\JsonEncoder;
+use Namshi\JOSE\Encoder\Encoder;
 
 /**
  * Class representing a JSON Web Token.
@@ -23,7 +24,12 @@ class JWT
     /**
      * @var Encoder
      */
-    protected $encoder;
+    protected $base64Encoder;
+
+    /**
+     * @var Encoder
+     */
+    protected $jsonEncoder;
 
     /**
      * Constructor.
@@ -35,15 +41,35 @@ class JWT
     {
         $this->setPayload($payload);
         $this->setHeader($header);
-        $this->setEncoder(new Base64UrlSafeEncoder());
+        $this->setBase64Encoder(new Base64UrlSafeEncoder());
+        $this->setJsonEncoder(new JsonEncoder());
     }
 
     /**
      * @param Encoder $encoder
      */
+    public function setBase64Encoder(Encoder $encoder)
+    {
+        $this->base64Encoder = $encoder;
+
+        return $this;
+    }
+
+    /**
+     * @param Encoder $encoder
+     * @deprecated Use setBase64Encoder()
+     */
     public function setEncoder(Encoder $encoder)
     {
-        $this->encoder = $encoder;
+        return $this->setBase64Encoder($encoder);
+    }
+
+    /**
+     * @param Encoder $encoder
+     */
+    public function setJsonEncoder(Encoder $encoder)
+    {
+        $this->jsonEncoder = $encoder;
 
         return $this;
     }
@@ -55,8 +81,10 @@ class JWT
      */
     public function generateSigninInput()
     {
-        $base64payload = $this->encoder->encode(json_encode($this->getPayload(), JSON_UNESCAPED_SLASHES));
-        $base64header = $this->encoder->encode(json_encode($this->getHeader(), JSON_UNESCAPED_SLASHES));
+        $payload = $this->jsonEncoder->encode($this->getPayload());
+        $base64payload = $this->base64Encoder->encode($payload);
+        $header = $this->jsonEncoder->encode($this->getHeader());
+        $base64header = $this->base64Encoder->encode($header);
 
         return sprintf('%s.%s', $base64header, $base64payload);
     }

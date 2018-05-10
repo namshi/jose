@@ -3,9 +3,10 @@
 namespace Namshi\JOSE;
 
 use InvalidArgumentException;
-use Namshi\JOSE\Base64\Base64Encoder;
-use Namshi\JOSE\Base64\Base64UrlSafeEncoder;
-use Namshi\JOSE\Base64\Encoder;
+use Namshi\JOSE\Encoder\JsonEncoder;
+use Namshi\JOSE\Encoder\Base64Encoder;
+use Namshi\JOSE\Encoder\Base64UrlSafeEncoder;
+use Namshi\JOSE\Encoder\Encoder;
 use Namshi\JOSE\Signer\SignerInterface;
 
 /**
@@ -30,7 +31,7 @@ class JWS extends JWT
      * @see https://tools.ietf.org/html/draft-ietf-jose-json-web-signature-41#section-4
      *
      * @param string $encryptionEngine
-     *                                 }
+     *
      */
     public function __construct($header = array(), $encryptionEngine = 'OpenSSL')
     {
@@ -96,7 +97,7 @@ class JWS extends JWT
     {
         $signinInput = $this->generateSigninInput();
 
-        return sprintf('%s.%s', $signinInput, $this->encoder->encode($this->getSignature()));
+        return sprintf('%s.%s', $signinInput, $this->base64Encoder->encode($this->getSignature()));
     }
 
     /**
@@ -104,24 +105,28 @@ class JWS extends JWT
      *
      * @param string  $jwsTokenString
      * @param bool    $allowUnsecure
-     * @param Encoder $encoder
+     * @param Encoder $base64Encoder
      * @param string  $encryptionEngine
      *
      * @return JWS
      *
      * @throws \InvalidArgumentException
      */
-    public static function load($jwsTokenString, $allowUnsecure = false, Encoder $encoder = null, $encryptionEngine = 'OpenSSL')
+    public static function load($jwsTokenString, $allowUnsecure = false, Encoder $base64Encoder = null, $encryptionEngine = 'OpenSSL', Encoder $jsonEncoder = null)
     {
-        if ($encoder === null) {
-            $encoder = strpbrk($jwsTokenString, '+/=') ? new Base64Encoder() : new Base64UrlSafeEncoder();
+        if ($base64Encoder === null) {
+            $base64Encoder = strpbrk($jwsTokenString, '+/=') ? new Base64Encoder() : new Base64UrlSafeEncoder();
+        }
+
+        if ($jsonEncoder === null) {
+            $jsonEncoder = new JsonEncoder();
         }
 
         $parts = explode('.', $jwsTokenString);
 
         if (count($parts) === 3) {
-            $header = json_decode($encoder->decode($parts[0]), true);
-            $payload = json_decode($encoder->decode($parts[1]), true);
+            $header = $jsonEncoder->decode($base64Encoder->decode($parts[0]));
+            $payload = $jsonEncoder->decode($base64Encoder->decode($parts[1]));
 
             if (is_array($header) && is_array($payload)) {
                 if (strtolower($header['alg']) === 'none' && !$allowUnsecure) {
@@ -130,7 +135,8 @@ class JWS extends JWT
 
                 $jws = new static($header, $encryptionEngine);
 
-                $jws->setEncoder($encoder)
+                $jws->setBase64Encoder($base64Encoder)
+                    ->setJsonEncoder($jsonEncoder)
                     ->setHeader($header)
                     ->setPayload($payload)
                     ->setOriginalToken($jwsTokenString)
@@ -158,7 +164,7 @@ class JWS extends JWT
             return false;
         }
 
-        $decodedSignature = $this->encoder->decode($this->getEncodedSignature());
+        $decodedSignature = $this->base64Encoder->decode($this->getEncodedSignature());
         $signinInput = $this->getSigninInput();
 
         return $this->getSigner()->verify($key, $decodedSignature, $signinInput);
