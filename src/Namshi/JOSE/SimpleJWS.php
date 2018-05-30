@@ -22,23 +22,8 @@ class SimpleJWS extends JWS
         if (!isset($header['typ'])) {
             $header['typ'] = 'JWS';
         }
+
         parent::__construct($header, $encryptionEngine);
-    }
-
-    /**
-     * Sets the payload of the current JWS with an issued at value in the 'iat' property.
-     *
-     * @param array $payload
-     *
-     * @return $this
-     */
-    public function setPayload(array $payload)
-    {
-        if (!isset($payload['iat'])) {
-            $payload['iat'] = time();
-        }
-
-        return parent::setPayload($payload);
     }
 
     /**

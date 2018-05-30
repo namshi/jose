@@ -24,7 +24,6 @@ class SimpleJWSTest extends TestCase
     public function testConstruction()
     {
         $this->assertSame($this->jws->getHeader(), array('alg' => 'RS256', 'typ' => 'JWS'));
-        $this->assertTrue(is_int($this->jws->getPayload()['iat']), 'iat property should be integer value (from construction)');
     }
 
     public function testValidationOfAValidSimpleJWS()
