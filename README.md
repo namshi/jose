@@ -59,14 +59,14 @@ First, generate the JWS:
 use Namshi\JOSE\SimpleJWS;
 
 if ($username == 'correctUsername' && $pass == 'ok') {
-	$user = Db::loadUserByUsername($username);
+    $user = Db::loadUserByUsername($username);
 
-	$jws  = new SimpleJWS(array(
-		'alg' => 'RS256'
-	));
-	$jws->setPayload(array(
-		'uid' => $user->getid(),
-	));
+    $jws  = new SimpleJWS([
+        'alg' => 'RS256'
+    ]);
+    $jws->setPayload([
+        'uid' => $user->getid(),
+    ]);
 
     $privateKey = openssl_pkey_get_private("file://path/to/private.key", self::SSL_KEY_PASSPHRASE);
     $jws->sign($privateKey);
@@ -91,9 +91,9 @@ $public_key = openssl_pkey_get_public("/path/to/public.key");
 // verify that the token is valid and had the same values
 // you emitted before while setting it as a cookie
 if ($jws->isValid($public_key, 'RS256')) {
-	$payload = $jws->getPayload();
+    $payload = $jws->getPayload();
 
-	echo sprintf("Hey, my JS app just did an action authenticated as user #%s", $payload['uid']);
+    echo sprintf("Hey, my JS app just did an action authenticated as user #%s", $payload['uid']);
 }
 ```
 
@@ -113,7 +113,7 @@ In these cases, simply add the optional `'SecLib'` parameter when
 constructing a JWS:
 
 ```php
-$jws = new JWS(array('alg' => 'RS256'), 'SecLib');
+$jws = new JWS(['alg' => 'RS256'], 'SecLib');
 ```
 
 You can now use the PHPSecLib implementation of RSA signing.  If you use
@@ -140,11 +140,11 @@ with a public key and then we will check whether the [token is expired](https://
 To give a JWS a TTL, just use the standard `exp` value in the payload:
 
 ``` php
-$date    	= new DateTime('tomorrow');
-$this->jws  = new SimpleJWS(array('alg' => 'RS256'));
-$this->jws->setPayload(array(
-	'exp' => $date->format('U'),
-));
+$date       = new DateTime('tomorrow');
+$this->jws  = new SimpleJWS(['alg' => 'RS256']);
+$this->jws->setPayload([
+    'exp' => $date->format('U'),
+]);
 ```
 
 ### Unsecure JWSes
