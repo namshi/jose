@@ -49,14 +49,14 @@ abstract class PublicKey implements SignerInterface
     /**
      * Converts a string representation of a key into an OpenSSL resource.
      *
-     * @param string|resource $key
+     * @param string|resource|\OpenSSLAsymmetricKey $key
      * @param string          $password
      *
-     * @return resource OpenSSL key resource
+     * @return resource|\OpenSSLAsymmetricKey OpenSSL key resource
      */
     protected function getKeyResource($key, $password = null)
     {
-        if (is_resource($key)) {
+        if (is_resource($key) || $key instanceof \OpenSSLAsymmetricKey) {
             return $key;
         }
 
